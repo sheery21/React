@@ -11,9 +11,12 @@ const Home = () => {
     console.log(task, "todo");
 
     try {
-      const result = axios.post("http://localhost:5000/add", { task: task });
-      console.log(result, "result");
+      
+      const result = axios.post("http://localhost:5000/add", { task });
+      console.log(result.data, "✅ Task Added:");
+      
     } catch (error) {
+
       console.log(error.message);
     }
   };
