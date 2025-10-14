@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.myDiv{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 10px;
+    gap: 10px;
+}
+button{
+    width: 120px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: cadetblue;
+}
+input{
+    width: 200px;
+    height: 25px;
+    padding-left: 10px;
+}
