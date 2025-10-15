@@ -31,15 +31,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // connectDB();
 
-app.post("/add", async (req, res) => {
+app.post("/addTodo", async (req, res) => {
   const { task } = req.body;
   try {
-   const todo = await todoModels.create({ task });
+    const todo = await todoModels.create({ task });
     console.log("✅ Task saved:", todo);
 
     res.status(201).json({
       message: "Todo added successfully",
       data: task,
+      status: true,
     });
   } catch (error) {
     console.log("❌ Error saving todo:", error.message);
@@ -50,6 +51,62 @@ app.post("/add", async (req, res) => {
   }
 });
 
+app.get("/getTodo", async (req, res) => {
+  try {
+    const getTodo = await todoModels.find();
+    res.status(201).json({
+      message: "Todo get successfully",
+      data: getTodo,
+      status: true,
+    });
+  } catch (error) {
+    console.log("❌ Error saving todo:", error.message);
+    res.status(500).json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
+
+app.put("/updaetTodo/:id", async (req, res) => {
+  let params = req.params.id;
+  let data = req.body;
+  try {
+    const updaetTodo = await todoModels.findByIdAndUpdate(params, data);
+
+    res.status(201).json({
+      message: "Todo update successfully",
+      data: updaetTodo,
+      status: true,
+    });
+  } catch (error) {
+    console.log("❌ Error saving todo:", error.message);
+    res.status(500).json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
+
+app.delete("/deleteTodo/:id", async (req, res) => {
+  let params = req.params.id;
+  let data = req.body;
+  try {
+    const deleteTodo = await todoModels.deleteMany();
+
+    res.status(201).json({
+      message: "Todo update successfully",
+      data: deleteTodo,
+      status: true,
+    });
+  } catch (error) {
+    console.log("❌ Error saving todo:", error.message);
+    res.status(500).json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
 app.listen(PORT, () =>
   console.log(`server running on http://localhost:${PORT}`)
 );
