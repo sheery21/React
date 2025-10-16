@@ -18,19 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// const connectDB = async () => {
-//   try {
-//     await mongoose.connect(URI, {
-//       serverSelectionTimeoutMS: 10000, // waits 10 seconds
-//     });
-//     console.log("✅ Connected to MongoDB");
-//   } catch (err) {
-//     console.error("❌ MongoDB connection error:", err.message);
-//   }
-// };
-
-// connectDB();
-
 app.post("/addTodo", async (req, res) => {
   const { task } = req.body;
   try {
@@ -68,11 +55,18 @@ app.get("/getTodo", async (req, res) => {
   }
 });
 
-app.put("/updaetTodo/:id", async (req, res) => {
-  let params = req.params.id;
-  let data = req.body;
+app.put("/updateTodo/:id", async (req, res) => {
+  let { id } = req.params;
+  let { task } = req.body;
   try {
-    const updaetTodo = await todoModels.findByIdAndUpdate(params, data);
+    const updaetTodo = await todoModels.findByIdAndUpdate(
+      id,
+      { task },
+      { new: true }
+    );
+    if (!updaetTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
 
     res.status(201).json({
       message: "Todo update successfully",
@@ -88,11 +82,28 @@ app.put("/updaetTodo/:id", async (req, res) => {
   }
 });
 
+app.put("/toggleTodo/:id", async (req, res) => {
+  let { id } = req.params;
+  try {
+    const todo = await todoModels.findById(id);
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+    todo.completed = !todo.completed;
+    await todo.save();
+
+    res.status(200).json({
+      message: "Todo status toggled successfully",
+      data: todo,
+      status: true,
+    });
+  } catch (error) {}
+});
+
 app.delete("/deleteTodo/:id", async (req, res) => {
   let params = req.params.id;
-  let data = req.body;
   try {
-    const deleteTodo = await todoModels.deleteMany();
+    const deleteTodo = await todoModels.findByIdAndDelete(params);
 
     res.status(201).json({
       message: "Todo update successfully",
@@ -106,6 +117,42 @@ app.delete("/deleteTodo/:id", async (req, res) => {
       data: null,
     });
   }
+});
+
+app.delete("/allDelete", async (req, res) => {
+  try {
+    const result = await todoModels.deleteMany();
+    res.status(200).json({
+      message: "All todos deleted successfully",
+      deletedCount: result.deletedCount,
+      status: true,
+    });
+  } catch (error) {
+    console.error("❌ Error deleting all todos:", error.message);
+    res.status(500).json({
+      message: "Failed to delete all todos",
+      error: error.message,
+      status: false,
+    });
+  }
+
+  app.delete("/deleteCompleted", async (req, res) => {
+    try {
+      const result = await todoModels.deleteMany({ completed: true }); // delete only completed
+      res.status(200).json({
+        message: "All completed todos deleted successfully",
+        deletedCount: result.deletedCount,
+        status: true,
+      });
+    } catch (error) {
+      console.error("❌ Error deleting completed todos:", error.message);
+      res.status(500).json({
+        message: "Failed to delete completed todos",
+        error: error.message,
+        status: false,
+      });
+    }
+  });
 });
 app.listen(PORT, () =>
   console.log(`server running on http://localhost:${PORT}`)

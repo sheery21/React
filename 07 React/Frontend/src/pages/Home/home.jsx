@@ -7,16 +7,26 @@ import axios from "axios";
 const API_URL = "http://localhost:5000";
 
 const Home = () => {
+  let [filter, setFilter] = useState("all");
   let [task, setTask] = useState("");
   let [theme, setTheme] = useState("black");
   let [todo, setTodo] = useState([]);
-  let [loading , setLoading]  = useState(true)
+
   useEffect(() => {
     getTodo();
   }, []);
 
+  const filteredTods = todo.filter((t) => {
+    if (filter === "active") return !t.completed;
+    if (filter === "completed") return t.completed;
+    return true;
+  });
+
+  const activeCount = todo.filter((t) => !t.completed).length;
+  const completedCount = todo.filter((t) => t.completed).length;
+
+  // ✅ Add Todo
   const addTodo = async () => {
-    console.log(task, "todo");
     if (task.trim().length < 5) {
       Swal.fire({
         title: "Too Short!",
@@ -28,9 +38,7 @@ const Home = () => {
     }
 
     try {
-      const result = await axios.post(`${API_URL}/addTodo`, { task });
-      console.log(result.data, "✅ Task Added:");
-
+      await axios.post(`${API_URL}/addTodo`, { task });
       setTask("");
       getTodo();
     } catch (error) {
@@ -38,169 +46,221 @@ const Home = () => {
     }
   };
 
+  // ✅ Get Todos
   const getTodo = async () => {
     try {
       const response = await axios.get(`${API_URL}/getTodo`);
-      console.log(response.data, "📦 All Todos from backend");
       setTodo(response.data.data);
     } catch (error) {
       console.log(error.message);
-    } finally{
-      setLoading(false)
     }
   };
 
-  const updateTodo = async() =>{
-    
-  }
+  // ✅ Edit Todo
+  const editTodo = async (id, oldTask) => {
+    const { value: newTask } = await Swal.fire({
+      title: "Edit your task",
+      input: "text",
+      inputValue: oldTask,
+      showCancelButton: true,
+      confirmButtonText: "Update",
+    });
+    if (!newTask) return;
+
+    try {
+      await axios.put(`${API_URL}/updateTodo/${id}`, { task: newTask });
+      getTodo();
+    } catch (error) {
+      console.log("❌ Edit error:", error.message);
+    }
+  };
+
+  // ✅ Toggle Complete
+  const toggleTodo = async (id) => {
+    try {
+      setTodo((prev) =>
+        prev.map((t) => (t._id === id ? { ...t, completed: !t.completed } : t))
+      );
+      await axios.put(`${API_URL}/toggleTodo/${id}`);
+      getTodo();
+    } catch (error) {
+      console.log("❌ Toggle error:", error.message);
+    }
+  };
+
+  // ✅ Delete Todo
+  const deleteTodo = async (id) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This task will be deleted permanently!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      await axios.delete(`${API_URL}/deleteTodo/${id}`);
+      getTodo();
+    } catch (error) {
+      console.log("❌ Delete error:", error.message);
+    }
+  };
+
+  let totalCount = todo.length;
+
+  // ✅ Theme styles
+  const isDark = theme === "black";
 
   return (
-    <>
+    <div
+      className={`min-h-screen flex items-center justify-center p-4 sm:p-6 transition-all duration-500 ${
+        isDark ? "bg-black text-white" : "bg-white text-black"
+      }`}
+    >
       <div
-        className={`min-h-screen flex items-center justify-center bg-black text-white p-6 ${
-          theme === "black" ? "bg-black text-white" : "bg-white text-black"
+        className={`w-full max-w-2xl rounded-2xl shadow-xl p-5 sm:p-6 border transition-all duration-500 ${
+          isDark ? "bg-gray-900 border-gray-700" : "bg-gray-100 border-gray-300"
         }`}
       >
-        <div className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-xl p-6 border border-gray-700">
-          {/* Header */}
-          <header className="flex items-center justify-between mb-6">
-            <h1 className="text-3xl font-bold tracking-tight">ToDoApp</h1>
-            <div className="flex items-center gap-2">
-              <Button
-                className="px-3 py-1 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
-                onClick={() => setTheme("black")}
-                text="Black"
-              />
-              <Button
-                className="px-3 py-1 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
-                onClick={() => setTheme("White")}
-                text="White"
-              />
-            </div>
-          </header>
+        {/* Header */}
+        <header className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-3">
+          <h1
+            className={`text-3xl font-extrabold text-center sm:text-left tracking-tight transition ${
+              isDark ? "text-white" : "text-black"
+            }`}
+          >
+            ToDoApp
+          </h1>
 
-          <div className="flex gap-3 mb-4">
-            <Input
-              type="text"
-              placeholder="Add a new task..."
-              className={`flex-1 px-4 py-3 rounded-lg outline-none ${
-                theme === "black"
-                  ? "bg-gray-800 border border-gray-700 placeholder-gray-400 text-white"
-                  : "bg-white border border-gray-300 text-black"
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            <Button
+              className={`px-3 py-1 rounded-full border font-medium transition-all duration-300 ${
+                isDark
+                  ? "bg-white text-black hover:bg-gray-200 border-white"
+                  : "bg-black text-white hover:bg-gray-800 border-black"
               }`}
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
+              onClick={() => setTheme(isDark ? "white" : "black")}
+              text={isDark ? "White" : "Black"}
+            />
+          </div>
+        </header>
+
+        {/* Input Field */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+          <Input
+            type="text"
+            placeholder="Add a new task..."
+            className={`flex-1 px-4 py-3 rounded-lg outline-none text-sm sm:text-base ${
+              isDark
+                ? "bg-gray-800 border border-gray-700 placeholder-gray-400 text-white"
+                : "bg-white border border-gray-300 text-black"
+            }`}
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <Button
+            className={`px-5 py-3 rounded-lg font-semibold transition-all duration-300 ${
+              isDark
+                ? "bg-white text-black hover:bg-gray-200"
+                : "bg-black text-white hover:bg-gray-800"
+            }`}
+            onClick={addTodo}
+            text="Add"
+          />
+        </div>
+
+        {/* Filter Buttons */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 text-xs sm:text-sm gap-2 sm:gap-0">
+          <div className="flex gap-2 sm:gap-3 flex-wrap justify-center">
+            {["all", "active", "completed"].map((type) => (
+              <Button
+                key={type}
+                className={`transition ${
+                  filter === type ? "underline" : "opacity-70 hover:underline"
+                }`}
+                onClick={() => setFilter(type)}
+                text={type.charAt(0).toUpperCase() + type.slice(1)}
+              />
+            ))}
+          </div>
+          <div className="text-gray-400 text-center sm:text-right">
+            {activeCount} active • {completedCount} done
+          </div>
+        </div>
+
+        {/* Todo List */}
+        <div className="space-y-2 max-h-[320px] sm:max-h-[400px] overflow-y-auto pr-1">
+          {filteredTods.map((value, index) => (
+            <div
+              key={value._id || index}
+              className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 px-4 py-3 rounded-lg ${
+                isDark ? "bg-gray-800" : "bg-gray-200"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 accent-blue-500"
+                  checked={value.completed}
+                  onChange={() => toggleTodo(value._id)}
+                />
+                <span
+                  className={`break-words ${
+                    value.completed ? "line-through opacity-60" : ""
+                  }`}
+                >
+                  {value.task}
+                </span>
+              </div>
+
+              <div className="flex gap-2 self-end sm:self-auto">
+                <Button
+                  className={`text-xs sm:text-sm px-2 py-1 rounded transition ${
+                    isDark ? "hover:bg-gray-700" : "hover:bg-gray-300"
+                  }`}
+                  text="Edit"
+                  onClick={() => editTodo(value._id, value.task)}
+                />
+                <Button
+                  className={`text-xs sm:text-sm px-2 py-1 rounded transition ${
+                    isDark ? "hover:bg-red-700" : "hover:bg-red-500 text-white"
+                  }`}
+                  text="Delete"
+                  onClick={() => deleteTodo(value._id)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <footer className="flex flex-col sm:flex-row justify-between items-center mt-5 text-xs sm:text-sm gap-2 sm:gap-0">
+          <div className="flex gap-2 sm:gap-3 flex-wrap justify-center">
+            <Button
+              className={`px-3 py-1 rounded border ${
+                isDark
+                  ? "border-gray-700 hover:bg-gray-800"
+                  : "border-gray-400 hover:bg-gray-200"
+              }`}
+              text="Clear All"
             />
             <Button
-              className="px-5 py-3 rounded-lg bg-white text-black font-semibold hover:bg-gray-200 transition"
-              onClick={addTodo}
-              text="Add"
+              className={`px-3 py-1 rounded border ${
+                isDark
+                  ? "border-gray-700 hover:bg-gray-800"
+                  : "border-gray-400 hover:bg-gray-200"
+              }`}
+              text="Clear Completed"
             />
           </div>
-
-          <div className="flex justify-between items-center mb-4 text-sm">
-            <div className="flex gap-3">
-              <button className="underline">All</button>
-              <button className="opacity-80 hover:underline">Active</button>
-              <button className="opacity-80 hover:underline">Completed</button>
-            </div>
-            <div className="text-gray-400">2 active • 3 done</div>
-          </div>
-
-          {/* Todo List */}
-
-          <div className="rounded-lg border border-gray-700 divide-y divide-gray-700 overflow-hidden">
-            { loading ?(
-               <p className="text-gray-400">⏳ Loading tasks...</p>
-            ): todo.length === 0 ? (
-              <p className="text-center py-4 text-gray-400">No tasks yet 😴</p>
-            ) : (
-              todo.map((value, index) => {
-                return(
-                <div
-                  key={value._id || index}
-                  className="flex justify-between items-center px-4 py-3 bg-gray-800"
-                >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4"
-                      checked={value.completed}
-                      readOnly
-                    />
-                    <span
-                      className={
-                        value.completed ? "line-through opacity-60" : ""
-                      }
-                    >
-                      {value.task}
-                    </span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button className="text-sm px-2 py-1 rounded hover:bg-gray-700">
-                      Edit
-                    </button>
-                    <button className="text-sm px-2 py-1 rounded hover:bg-red-700">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-            )
-              })
-            )}
-            {/* <div className="flex justify-between items-center px-4 py-3 bg-gray-800">
-              <div className="flex items-center gap-3">
-              <input type="checkbox" className="w-4 h-4" />
-              <span>Learn React</span>
-              </div>
-              <div className="flex gap-2">
-              <button className="text-sm px-2 py-1 rounded hover:bg-gray-700">
-              Edit
-              </button>
-              <button className="text-sm px-2 py-1 rounded hover:bg-red-700">
-              Delete
-              </button>
-              </div>
-              </div> */}
-
-            {/* <div className="flex justify-between items-center px-4 py-3 bg-gray-800">
-            <div className="flex items-center gap-3">
-              <input type="checkbox" className="w-4 h-4" />
-              <span className="line-through opacity-60">Build ToDo App</span>
-            </div>
-            <div className="flex gap-2">
-              <button className="text-sm px-2 py-1 rounded hover:bg-gray-700">Edit</button>
-              <button className="text-sm px-2 py-1 rounded hover:bg-red-700">Delete</button>
-            </div>
-          </div> */}
-
-            {/* <div className="flex justify-between items-center px-4 py-3 bg-gray-800">
-            <div className="flex items-center gap-3">
-              <input type="checkbox" className="w-4 h-4" />
-              <span>Study TailwindCSS</span>
-            </div>
-            <div className="flex gap-2">
-              <button className="text-sm px-2 py-1 rounded hover:bg-gray-700">Edit</button>
-              <button className="text-sm px-2 py-1 rounded hover:bg-red-700">Delete</button>
-            </div>
-          </div> */}
-          </div>
-
-          {/* Footer */}
-          <footer className="flex justify-between mt-5 text-sm">
-            <div className="flex gap-3">
-              <button className="px-3 py-1 rounded border border-gray-700 hover:bg-gray-800">
-                Clear All
-              </button>
-              <button className="px-3 py-1 rounded border border-gray-700 hover:bg-gray-800">
-                Clear Completed
-              </button>
-            </div>
-            <span className="text-gray-400">Total: 5</span>
-          </footer>
-        </div>
+          <span className="text-gray-400 text-center sm:text-right">
+            Total: {totalCount}
+          </span>
+        </footer>
       </div>
-    </>
+    </div>
   );
 };
 
