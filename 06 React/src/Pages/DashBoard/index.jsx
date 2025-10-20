@@ -1,123 +1,189 @@
-// import React, { useState } from "react";
-// import NavBar from "../../Componentes/NavBar";
-// import Futter from "../../Componentes/Futter";
-// import Button from "../../Componentes/Button/button";
-// import { collection, addDoc } from "firebase/firestore";
-// import { db } from "../../fireBase";
+import React, { useEffect, useState } from "react";
+import NavBar from "../../Componentes/NavBar";
+import Futter from "../../Componentes/Futter";
 
-// const DashBoard = () => {
-//   let [Todo, setTodo] = useState("");
-//   let [resetTodo, setResetTodo] = useState([]);
-//   // useEffect(()=> addTodo(),[])
+const DashBoard = () => {
+  const [pitches, setPitches] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [idea, setIdea] = useState("");
+  const [tone, setTone] = useState("Formal");
+  const [generating, setGenerating] = useState(false);
+  const [queryError, setQueryError] = useState("");
 
-//   const allFilters = ["All", "Active", "Completed"];
+  // Load pitches from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("pitchcraft:pitches");
+    if (stored) setPitches(JSON.parse(stored));
+  }, []);
 
-//   const addTodo = async () => {
-//     console.log("Todo", Todo);
-//     console.log("resetTodo", resetTodo);
+  useEffect(() => {
+    localStorage.setItem("pitchcraft:pitches", JSON.stringify(pitches));
+  }, [pitches]);
 
-//     localStorage.getItem("userUid");
-//     try {
-//       const docRef = await addDoc(collection(db, "todos"), { Todo });
-//       let id = docRef.id;
-//       setResetTodo([...resetTodo, { id, Todo }]);    
-//       setTodo("");
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-//   return (
-//     <>
-//       <NavBar />
-//       <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-6">
-//         <div className="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-6">
-//           {/* Header */}
-//           <h1 className="text-2xl font-bold mb-6 text-center">📝 To-Do List</h1>
+  // Call Firebase Function to generate pitch
+  const generatePitchFromAI = async (ideaText, tone = "Formal") => {
+    try {
+      setGenerating(true);
+      const res = await fetch("/api/generatePitch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idea: ideaText, tone }),
+      });
+      const data = await res.json();
+      setGenerating(false);
+      return data.pitch;
+    } catch (error) {
+      setGenerating(false);
+      console.error("AI Error:", error);
+      return "Error generating pitch.";
+    }
+  };
 
-//           {/* Input row */}
-//           <div className="flex gap-3 mb-6">
-//             <input
-//               type="text"
-//               placeholder="Add a new task..."
-//               onChange={(e) => setTodo(e.target.value)}
-//               className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-//               value={Todo}
-//             />
-//             <Button
-//               className="w-auto px-4 py-2"
-//               text={"Add"}
-//               onClick={addTodo}
-//             />
-//           </div>
+  const handleCreatePitch = async (e) => {
+    e.preventDefault();
+    if (idea.trim().length < 6) {
+      setQueryError("Please enter at least 6 characters.");
+      return;
+    }
+    setQueryError("");
 
-//           {/* Filters */}
+    const newPitchText = await generatePitchFromAI(idea, tone);
+    const newPitch = {
+      id: Date.now(),
+      name: idea.slice(0, 15) + "…",
+      pitch: newPitchText,
+      createdAt: new Date().toISOString(),
+    };
+    setPitches([newPitch, ...pitches]);
+    setIdea("");
+    setSelected(newPitch);
+  };
 
-//               <div className="flex items-center justify-between text-sm mb-6">
-//           {
-//             allFilters.map(value ,id)(
-//             <div className="flex gap-2" key={id} >
-//               <button className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600">
-//                 { value }
-//               </button>
-//               <button className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600">
-//                 Active
-//               </button>
-//               <button className="px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-600">
-//                 Completed
-//               </button>
-//             </div>
-//           )
-//         }
-//             <span className="text-gray-400">3 tasks</span>
-//           </div>
-//           {/* Task list */}
-//           {resetTodo.map((value) => (
-//             <div className="space-y-3" key={value.id}>
-//               <li className="flex items-center justify-between bg-gray-700 rounded-lg px-4 py-3">
-//                 <div className="flex items-center gap-3">
-//                   <input
-//                     type="checkbox"
-//                     className="h-5 w-5 accent-indigo-600"
-//                   />
+  const handleDelete = (id) => {
+    if (!window.confirm("Do you really want to delete this pitch?")) return;
+    setPitches(pitches.filter((p) => p.id !== id));
+    if (selected?.id === id) setSelected(null);
+  };
 
-//                   <span className="text-sm">{value.Todo}</span>
-//                 </div>
-//                 <button className="text-red-400 hover:text-red-500">✖</button>
-//               </li>
-//               {/* <li className="flex items-center justify-between bg-gray-700 rounded-lg px-4 py-3 opacity-70">
-//             <div className="flex items-center gap-3">
-//               <input
-//                 type="checkbox"
-//                 checked
-//                 readOnly
-//                 className="h-5 w-5 accent-indigo-600"
-//                 />
-//               <span className="text-sm line-through text-gray-400">
-//                 Write blog post
-//               </span>
-//             </div>
-//             <button className="text-red-400 hover:text-red-500">✖</button>
-//             </li> */}
+  const handleExport = (p) => {
+    const html = `
+      <html>
+        <head><title>${p.name}</title></head>
+        <body>
+          <h1>${p.name}</h1>
+          <p>${p.pitch}</p>
+        </body>
+      </html>`;
+    const w = window.open("", "_blank");
+    w.document.write(html);
+    w.document.close();
+    w.print();
+  };
 
-//               {/* <li className="flex items-center justify-between bg-gray-700 rounded-lg px-4 py-3">
-//             <div className="flex items-center gap-3">
-//             <input type="checkbox" className="h-5 w-5 accent-indigo-600" />
-//               <span className="text-sm">Refactor code</span>
-//             </div>
-//             <button className="text-red-400 hover:text-red-500">✖</button>
-//             </li> */}
-//             </div>
-//           ))}
-//           {/* Footer */}
-//           <div className="mt-6 flex items-center justify-between text-sm text-gray-400">
-//             <span>Showing 2 of 3 tasks</span>
-//             <button className="hover:text-gray-200">Clear Completed </button>
-//           </div>
-//         </div>
-//       </div>
-//       <Futter />
-//     </>
-//   );
-// };
+  return (
+    <>
+      <NavBar />
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-6xl mx-auto">
+          <header className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-extrabold">
+                PitchCraft — AI Startup Partner
+              </h1>
+              <p className="text-sm text-gray-600">
+                Generate startup pitches quickly and creatively
+              </p>
+            </div>
+            <button
+              onClick={() => setIdea("")}
+              className="px-4 py-2 bg-black text-white rounded-lg hover:opacity-90"
+            >
+              + Create New Pitch
+            </button>
+          </header>
 
-// export default DashBoard;
+          <main className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <section className="md:col-span-2 bg-white p-5 rounded-2xl shadow-sm">
+              <h2 className="font-semibold mb-3">Saved Pitches</h2>
+              {pitches.length === 0 ? (
+                <p className="text-gray-500">No pitches yet.</p>
+              ) : (
+                <ul className="space-y-3">
+                  {pitches.map((p) => (
+                    <li
+                      key={p.id}
+                      className="border rounded-lg p-3 flex items-start justify-between"
+                    >
+                      <div>
+                        <h3 className="font-semibold text-lg">{p.name}</h3>
+                        <p className="text-sm text-gray-600">{p.pitch}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {new Date(p.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-2 ml-4">
+                        <button
+                          onClick={() => setSelected(p)}
+                          className="px-3 py-1 border rounded text-sm"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleExport(p)}
+                          className="px-3 py-1 border rounded text-sm"
+                        >
+                          Export
+                        </button>
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          className="px-3 py-1 border rounded text-sm text-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <aside className="bg-white p-5 rounded-2xl shadow-sm sticky top-6">
+              <h3 className="font-semibold">Generate New Pitch</h3>
+              <p className="text-sm text-gray-500 mb-3">
+                Enter your idea and select tone.
+              </p>
+              <select
+                value={tone}
+                onChange={(e) => setTone(e.target.value)}
+                className="w-full border rounded px-2 py-1 mb-3"
+              >
+                <option>Formal</option>
+                <option>Friendly</option>
+                <option>Playful</option>
+                <option>Persuasive</option>
+              </select>
+              <textarea
+                value={idea}
+                onChange={(e) => setIdea(e.target.value)}
+                placeholder="Describe your startup idea..."
+                className="w-full border rounded p-2 h-24 mb-3"
+              />
+              <button
+                onClick={handleCreatePitch}
+                className="w-full py-2 bg-black text-white rounded hover:opacity-90"
+              >
+                {generating ? "Generating..." : "Generate Pitch"}
+              </button>
+              {queryError && (
+                <p className="text-red-500 text-sm mt-2">{queryError}</p>
+              )}
+            </aside>
+          </main>
+        </div>
+      </div>
+      <Futter />
+    </>
+  );
+};
+
+export default DashBoard;
