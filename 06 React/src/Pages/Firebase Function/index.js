@@ -8,7 +8,7 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 
 const client = new OpenAI({
-  apiKey: functions.config().openai.key, // Firebase env variable
+  apiKey: functions.config().openai.key, 
   baseURL: "https://openrouter.ai/api/v1",
 });
 
