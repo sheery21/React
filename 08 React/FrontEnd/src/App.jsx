@@ -1,10 +1,11 @@
 import './App.css'
+import DashBoard from './DashBoard/app'
 
 function App() {
 
   return (
     <>
-    <h3>hello</h3>
+    <DashBoard/>
     </>
   )
 }
