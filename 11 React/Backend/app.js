@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import e from "cors";
 import userModel from "./models/userSchema.js";
 import { authMiddleware } from "./middleware/auth.js";
+import todoModels from "./models/todosSchema.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -67,6 +68,12 @@ app.post("/logIn", async (request, response) => {
 
     const passCompare = await bcrypt.compare(password, user.password);
 
+    const userObj = {
+      fullName: user.fullName,
+      gender: user.gender,
+      email: user.email,
+    };
+
     if (!passCompare) {
       return response.json({
         message: "email or password invalid",
@@ -83,6 +90,7 @@ app.post("/logIn", async (request, response) => {
     response.json({
       message: "user successfully login",
       status: true,
+      user: userObj,
       token,
     });
   } catch (error) {
@@ -93,9 +101,86 @@ app.post("/logIn", async (request, response) => {
   }
 });
 
-app.post('/createpost', authMiddleware , (request , response) =>{
+app.post("/createpost", authMiddleware, (request, response) => {
   response.json("API HIT : post Created");
-})
+});
+
+app.post("/addTodo", async (req, res) => {
+  try {
+    const { task } = req.body;
+    await todoModels.create({ task });
+    res.json({
+      message: "Todo added successfully",
+      data: task,
+      status: true,
+    });
+  } catch (error) {
+    console.log("Error saving todo:", error.message);
+    res.json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
+
+app.put("/updateTodo/:id", async (request, response) => {
+  const { id } = request.params;
+  const { task } = request.body;
+  try {
+    const updateTask = await todoModels.findByIdAndUpdate(
+      id,
+      { task },
+      { new: true }
+    );
+    if (!updateTask) {
+      return res.json({ message: "Todo not found", status: false });
+    }
+
+    response.json({
+      message: updateTask,
+      status: true,
+    });
+  } catch (error) {
+    response.json({
+      message: error.message,
+      status: false,
+    });
+  }
+});
+
+app.delete("/deleteTodo/:id", async (request, response) => {
+  const { id } = request.params;
+  try {
+    const deleteTodo = await todoModels.findByIdAndDelete(id);
+    response.json({
+      message: "Todo update successfully",
+      data: deleteTodo,
+      status: true,
+    });
+  } catch (error) {
+    response.json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
+
+app.delete("/deleteAllTodo", async (request, response) => {
+  try {
+    const allDelete = await todoModels.deleteMany();
+    response.json({
+      message: "All completed todos deleted successfully",
+      deletedCount: allDelete.deletedCount,
+      status: true,
+    });
+  } catch (error) {
+    response.json({
+        message: "Failed to delete completed todos",
+        error: error.message,
+        status: false,
+      });
+  }
+});
 
 app.listen(PORT, () =>
   console.log(`server running on http://localhost${PORT}`)

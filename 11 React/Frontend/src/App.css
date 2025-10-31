@@ -124,3 +124,88 @@ body {
 .signup-box button:hover {
   background: #3730a3;
 }
+
+
+
+/* DASHBOARD */
+
+body {
+  background: #fffdf6;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+
+.notes-dashboard {
+  padding: 40px 60px;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  font-size: 2.3rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.welcome {
+  font-size: 1.1rem;
+  color: #777;
+}
+
+.notes-container {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.note-card {
+  background: #fff8c6;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.note-card h3 {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.note-card p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.add-note {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dfffd6;
+  cursor: pointer;
+}
+
+.logout-section {
+  margin-top: 50px;
+}
+
+.logout-btn {
+  background: #ff4b2b !important;
+  color: white !important;
+  border-radius: 25px;
+  padding: 10px 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e63b1a !important;
+  transform: scale(1.05);
+}

@@ -30,11 +30,12 @@ const LogIn = () => {
     try {
       const response = await axios.post(LOGNIN_API, userObj);
       const data = await response.data;
-      const token = data.token;
 
-      if (data.status == true) {
-        console.log(token);
-        localStorage.setItem("token", token);
+      if (data.status === true && data.user) {
+        const user = data.user;
+        const token = data.token;
+        sessionStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("token", token);
         setSucccess(data.message || "Account created successfully!");
         setError("");
         Swal.fire({
