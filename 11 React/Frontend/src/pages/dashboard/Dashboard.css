@@ -1,0 +1,135 @@
+.floating-add-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6); /* Elegant Blue Gradient */
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  font-size: 28px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+
+.floating-add-btn:hover {
+  transform: translateY(-6px) scale(1.08);
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  box-shadow: 0 10px 24px rgba(29, 78, 216, 0.45);
+}
+
+
+
+
+.notes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.note-card {
+  background-color: #fff8a6; /* soft yellow */
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  width: 240px;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.note-card:hover {
+  transform: translateY(-3px);
+}
+
+.note-body {
+  flex: 1;
+}
+
+.note-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #444;
+  margin: 0 0 8px;
+  word-break: break-word;
+}
+
+.note-content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.note-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.note-footer button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.note-footer button:hover {
+  transform: scale(1.2);
+}
+
+.edit-btn {
+  color: #007bff;
+}
+
+.delete-btn {
+  color: #e63946;
+}
+
+
+
+
+.note-footer {
+  display: flex;
+  justify-content: space-between; /* 🟢 meta left, buttons right */
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+}
+
+.note-meta {
+  font-size: 12px;
+  color: #555;
+  text-align: left;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.note-actions button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.note-actions button:hover {
+  transform: scale(1.2);
+}

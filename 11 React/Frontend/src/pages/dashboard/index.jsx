@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
 // import { useNavigate } from 'react-router-dom'
 import Navbar from "../../components/NavBar";
+import axios from "axios";
+import AddNotePopup from "../../components/AddNotePopup/AddNotePopup";
+import "./Dashboard.css";
 
 const DashBasrd = () => {
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
+  const CreatePost_API = "http://localhost:5000/createpost";
+  const AddToDo_API = "http://localhost:5000/addTodo";
+  const getToDo_API = "http://localhost:5000/getTodo";
+  const DeleToDo_API = "http://localhost:5000/getTodo";
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
@@ -13,13 +20,91 @@ const DashBasrd = () => {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
     }
-
-    setNotes([
-      { id: 1, title: "Buy groceries", content: "Milk, Bread, Eggs" },
-      { id: 2, title: "Project idea", content: "Sticky Notes app design" },
-      { id: 3, title: "Call Ahmed", content: "Discuss React UI" },
-    ]);
   }, []);
+  useEffect(() => {
+    const savedNotes = JSON.parse(localStorage.getItem("notes"));
+    if (savedNotes) setNotes(savedNotes);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    return now.toLocaleString(); // e.g. "10/31/2025, 11:30 AM"
+  };
+
+  const createPost = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        CreatePost_API,
+        { token },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert(response.data.message || "Post created successfully!");
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      return null;
+    }
+  };
+
+  const addTodo = async () => {
+    try {
+      const createTokon = await createPost();
+      if (!createTokon) return;
+      const task = await AddNotePopup();
+      if (!task) return;
+      const newTask = { ...task, createdAt: getCurrentDateTime() };
+      const response = await axios.post(AddToDo_API, newTask);
+      console.log(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      alert("Something went wrong!");
+    }
+  };
+
+  const getTodo = async () => {
+    try {
+      const response = await axios.get(getToDo_API);
+      const tasks = response.data.data;
+
+      console.log("Raw Response:", response);
+      console.log("All tasks:", tasks);
+
+      if (!tasks || !Array.isArray(tasks)) return;
+
+      const validTasks = tasks.filter((t) => t.task1 && t.task2);
+      setNotes(validTasks);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleEdit = async () => {};
+  const handleDelete = async () => {
+    // try {
+    //   const response = await axios.delete()
+    // } catch (error) {}
+  };
+
+  const handleAddNote = async () => {
+    try {
+      await addTodo();
+      const data = await getTodo();
+      console.log("New Note Added:", data);
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong!");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -36,20 +121,42 @@ const DashBasrd = () => {
         </header>
 
         <div className="notes-container">
-          {notes.map((note) => (
-            <div key={note.id} className="note-card">
-              <h3>{note.title}</h3>
-              <p>{note.content}</p>
-            </div>
-          ))}
+          {notes.length > 0 ? (
+            notes.map((note, i) => (
+              <div key={note._id || i} className="note-card">
+                <div className="note-body">
+                  <h3 className="note-title">{note.task1}</h3>
+                  <p className="note-content">{note.task2}</p>
+                </div>
 
-          <div className="note-card add-note">
-            <Button
-              text="+ Add Note"
-              onClick={() => alert("Add Note Clicked")}
-            />
-          </div>
+                <div className="note-footer">
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEdit(note._id)}
+                    title="Edit Note"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(note._id)}
+                    title="Delete Note"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="empty">No notes yet — add one!</p>
+          )}
         </div>
+
+        <Button
+          className="floating-add-btn"
+          text="➕"
+          onClick={handleAddNote}
+        />
       </div>
     </>
   );

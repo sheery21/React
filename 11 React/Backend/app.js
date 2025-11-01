@@ -107,8 +107,10 @@ app.post("/createpost", authMiddleware, (request, response) => {
 
 app.post("/addTodo", async (req, res) => {
   try {
-    const { task } = req.body;
-    await todoModels.create({ task });
+    const { task1, task2 } = req.body;
+    console.log("task1", "task2", task1, task2);
+
+    const task = await todoModels.create({ task1, task2 });
     res.json({
       message: "Todo added successfully",
       data: task,
@@ -117,6 +119,25 @@ app.post("/addTodo", async (req, res) => {
   } catch (error) {
     console.log("Error saving todo:", error.message);
     res.json({
+      message: error.message,
+      data: null,
+    });
+  }
+});
+app.get("/getTodo", async (request, response) => {
+  try {
+    const getTodo = await todoModels.find();
+    const data = await getTodo.data;
+    console.log(data, "data");
+
+    response.json({
+      message: "Todo get successfully",
+      data: getTodo,
+      status: true,
+    });
+  } catch (error) {
+    console.log("❌ Error saving todo:", error.message);
+    res.status(500).json({
       message: error.message,
       data: null,
     });
@@ -175,10 +196,10 @@ app.delete("/deleteAllTodo", async (request, response) => {
     });
   } catch (error) {
     response.json({
-        message: "Failed to delete completed todos",
-        error: error.message,
-        status: false,
-      });
+      message: "Failed to delete completed todos",
+      error: error.message,
+      status: false,
+    });
   }
 });
 

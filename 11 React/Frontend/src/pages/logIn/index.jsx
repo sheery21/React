@@ -35,6 +35,7 @@ const LogIn = () => {
         const user = data.user;
         const token = data.token;
         sessionStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token)
         sessionStorage.setItem("token", token);
         setSucccess(data.message || "Account created successfully!");
         setError("");
