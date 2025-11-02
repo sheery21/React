@@ -146,15 +146,15 @@ app.get("/getTodo", async (request, response) => {
 
 app.put("/updateTodo/:id", async (request, response) => {
   const { id } = request.params;
-  const { task } = request.body;
+  const { task1 , task2 } = request.body;
   try {
     const updateTask = await todoModels.findByIdAndUpdate(
       id,
-      { task },
+      { task1,task2 },
       { new: true }
     );
     if (!updateTask) {
-      return res.json({ message: "Todo not found", status: false });
+      return response.json({ message: "Todo not found", status: false });
     }
 
     response.json({
