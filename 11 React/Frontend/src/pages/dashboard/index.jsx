@@ -118,37 +118,6 @@ const DashBasrd = () => {
     }
   };
 
-  const handleDeleteAll = async () => {
-    try {
-      const confirm = await Swal.fire({
-        title: "Are you sure?",
-        text: "All notes will be permanently deleted!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete all!",
-      });
-
-      if (!confirm.isConfirmed) return;
-
-      const response = await axios.delete(deleteAllToDo_API);
-
-      if (response.data.status) {
-        Swal.fire("Deleted!", "All notes have been deleted.", "success");
-        setNotes([]); // clear UI
-      } else {
-        Swal.fire(
-          "Oops!",
-          response.data.message || "Something went wrong!",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.log("❌ Delete all error:", error.message);
-      Swal.fire("Error!", "Failed to delete all notes.", "error");
-    }
-  };
 
   // Edit / Delete placeholders
   const handleEdit = async (id, oldTask1, oldTask2) => {
@@ -225,6 +194,38 @@ const DashBasrd = () => {
       Swal.fire("Error!", "Failed to delete note.", "error");
     }
   };
+    const handleDeleteAll = async () => {
+    try {
+      const confirm = await Swal.fire({
+        title: "Are you sure?",
+        text: "All notes will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete all!",
+      });
+
+      if (!confirm.isConfirmed) return;
+
+      const response = await axios.delete(deleteAllToDo_API);
+
+      if (response.data.status) {
+        Swal.fire("Deleted!", "All notes have been deleted.", "success");
+        setNotes([]); // clear UI
+      } else {
+        Swal.fire(
+          "Oops!",
+          response.data.message || "Something went wrong!",
+          "error"
+        );
+      }
+    } catch (error) {
+      console.log("❌ Delete all error:", error.message);
+      Swal.fire("Error!", "Failed to delete all notes.", "error");
+    }
+  };
+
 
   // Format date for UI
   const formatDate = (dateStr) => new Date(dateStr).toLocaleString();

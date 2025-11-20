@@ -5,7 +5,6 @@ import bcrypt, { truncates } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import e from "cors";
 import userModel from "./models/userSchema.js";
-import { authMiddleware } from "./middleware/auth.js";
 import todoModels from "./models/todosSchema.js";
 
 const app = express();
