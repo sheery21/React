@@ -1,41 +1,42 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import "../../App.css";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-const SignUp = () => {
-  const [fullName, setFullName] = useState("");
-  const [gender, setGender] = useState("");
+const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [succcess, setSucccess] = useState("");
-  const signUp_API = "http://localhost:5000/signUp";
+  const LOGNIN_API = "http://localhost:3000/api/auth/logIn";
   const navigate = useNavigate();
-  const handleChange = async () => {
-    if (!fullName || !gender || !email || !password) {
+
+  const handleSubmit = async () => {
+    if (!email || !password) {
       return Swal.fire({
         title: "Missing Information!",
-        text: "Please fill out all fields before signing up.",
+        text: "Please fill out all fields before logIn.",
         icon: "error",
         confirmButtonColor: "#d33",
       });
     }
-    try {
-      const userObj = {
-        fullName,
-        gender,
-        email,
-        password,
-      };
-      const response = await axios.post(signUp_API, userObj);
-      const data = await response.data;
-      console.log(data);
+    const userObj = {
+      email,
+      password,
+    };
 
-      if (data.status == true) {
+    try {
+      const response = await axios.post(LOGNIN_API, userObj);
+      const data = await response.data;
+
+      if (data.status === true && data.user) {
+        const user = data.user;
+        const token = data.token;
+        sessionStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("token", token);
+        localStorage.setItem("token", token);
         setSucccess(data.message || "Account created successfully!");
         setError("");
         Swal.fire({
@@ -44,7 +45,7 @@ const SignUp = () => {
           icon: "success",
           confirmButtonColor: "#3085d6",
         });
-        navigate("/");
+        navigate("/dashboard");
       } else {
         setError(data.message || "Something went wrong!");
         setSucccess("");
@@ -68,41 +69,18 @@ const SignUp = () => {
       });
     }
 
-    setFullName("");
-    setGender("");
     setEmail("");
     setPassword("");
   };
 
   return (
     <>
-      <div className="signup-container">
-        <div className="signup-box">
-          <h2>Create Account</h2>
-          <Input
-            type="text"
-            name="fullName"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-
-          <select
-            name="gender"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            required
-          >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-
+      <div className="login-container">
+        <div className="login-box">
+          <h2>Login</h2>
           <Input
             type="email"
-            name="email"
-            placeholder="Email Address"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -110,14 +88,13 @@ const SignUp = () => {
 
           <Input
             type="password"
-            name="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Link to={"/"}>Login?</Link>
-          <Button type="submit" onClick={handleChange} text={"Sign Up"} />
+          <Link to={"/signUp"}>signUp?</Link>
+          <Button type="submit" onClick={handleSubmit} text={"Sign In"} />
           {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
           {succcess && (
             <p style={{ color: "green", marginTop: "10px" }}>{succcess}</p>
@@ -128,4 +105,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default LogIn;

@@ -7,16 +7,16 @@ import Button from "../../components/Button";
 import "../../App.css";
 
 const SignUp = () => {
-  const [fullName, setFullName] = useState("");
-  const [gender, setGender] = useState("");
+  const [name, setName] = useState("");
+  const [mobileNUmber, setMobileNUmber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [succcess, setSucccess] = useState("");
-  const signUp_API = "http://localhost:5000/signUp";
+  const signUp_API = "http://localhost:3000/api/auth/signUp";
   const navigate = useNavigate();
   const handleChange = async () => {
-    if (!fullName || !gender || !email || !password) {
+    if (!name || !mobileNUmber || !email || !password) {
       return Swal.fire({
         title: "Missing Information!",
         text: "Please fill out all fields before signing up.",
@@ -26,8 +26,8 @@ const SignUp = () => {
     }
     try {
       const userObj = {
-        fullName,
-        gender,
+        name,
+        mobileNUmber,
         email,
         password,
       };
@@ -44,7 +44,11 @@ const SignUp = () => {
           icon: "success",
           confirmButtonColor: "#3085d6",
         });
-        navigate("/");
+        navigate("/otp-verify", {
+          state: {
+            email,
+          },
+        });
       } else {
         setError(data.message || "Something went wrong!");
         setSucccess("");
@@ -68,8 +72,8 @@ const SignUp = () => {
       });
     }
 
-    setFullName("");
-    setGender("");
+    setName("");
+    setMobileNUmber("");
     setEmail("");
     setPassword("");
   };
@@ -81,23 +85,21 @@ const SignUp = () => {
           <h2>Create Account</h2>
           <Input
             type="text"
-            name="fullName"
+            name="name"
             placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
 
-          <select
-            name="gender"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
+          <Input
+            type="text"
+            placeholder="Mobile Number"
+            name="mobileNUmber"
+            value={mobileNUmber}
+            onChange={(e) => setMobileNUmber(e.target.value)}
             required
-          >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
+          />
 
           <Input
             type="email"

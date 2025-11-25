@@ -1,42 +1,298 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+
+/* Simper & clean color scheme */
+
+/* LOGIN CSS */
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f8fafc;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 300px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #333;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.login-box input:focus {
+  border-color: #74b9ff;
 }
 
-.card {
-  padding: 2em;
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.login-box button:hover {
+  background: #3730a3;
+}
+
+/* SIGNUP CSS */
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f8fafc;
+}
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.signup-box {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+.signup-box h2 {
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 28px;
+}
+
+.signup-box input,
+.signup-box select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.signup-box input:focus,
+.signup-box select:focus {
+  border-color: #4f46e5;
+  outline: none;
+  box-shadow: 0 0 5px rgba(79, 70, 229, 0.3);
+}
+
+.signup-box button {
+  width: 100%;
+  padding: 12px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.signup-box button:hover {
+  background: #3730a3;
+}
+
+
+
+/* DASHBOARD */
+
+body {
+  background: #fffdf6;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+
+.notes-dashboard {
+  padding: 40px 60px;
+  text-align: center;
+}
+
+.dashboard-header h1 {
+  font-size: 2.3rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.welcome {
+  font-size: 1.1rem;
+  color: #777;
+}
+
+.notes-container {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.note-card {
+  background: #fff8c6;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.note-card h3 {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.note-card p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.add-note {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dfffd6;
+  cursor: pointer;
+}
+
+.logout-section {
+  margin-top: 50px;
+}
+
+.logout-btn {
+  background: #ff4b2b !important;
+  color: white !important;
+  border-radius: 25px;
+  padding: 10px 25px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e63b1a !important;
+  transform: scale(1.05);
+}
+
+/* Main center wrapper */
+.otp-main {
+  width: 100%;
+  height: 100vh;
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* White box */
+.otp-box {
+  width: 350px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.otp-box h2 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.otp-box p {
+  color: #555;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* OTP Inputs */
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.otp-inputs input {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.otp-inputs input:focus {
+  border-color: royalblue;
+  box-shadow: 0 0 5px rgba(65,105,225,0.4);
+}
+
+/* Button */
+.otp-btn {
+  width: 100%;
+  padding: 12px 0;
+  background: royalblue;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.otp-btn:hover {
+  background: #1e46c9;
+}
+
+/* Resend text */
+.resend {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #555;
+}
+
+.resend span {
+  color: royalblue;
+  font-weight: bold;
+  cursor: pointer;
 }
