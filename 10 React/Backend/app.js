@@ -97,7 +97,7 @@ app.post("/logIn", async (request, response) => {
 });
 
 app.post("/createpost", authMiddleware, (request, response) => {
-  response.json("API HIT : post Created");
+  response.json("API HIT : post Created"); 
 });
 
 app.get("/getpost", authMiddleware,(request, response) => {

@@ -2,7 +2,11 @@
   position: fixed;
   bottom: 32px;
   right: 32px;
-  background: linear-gradient(135deg, #2563eb, #3b82f6); /* Elegant Blue Gradient */
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #3b82f6
+  ); /* Elegant Blue Gradient */
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -24,9 +28,6 @@
   background: linear-gradient(135deg, #1d4ed8, #2563eb);
   box-shadow: 0 10px 24px rgba(29, 78, 216, 0.45);
 }
-
-
-
 
 .notes-container {
   display: flex;
@@ -99,9 +100,6 @@
   color: #e63946;
 }
 
-
-
-
 .note-footer {
   display: flex;
   justify-content: space-between; /* 🟢 meta left, buttons right */
@@ -133,7 +131,6 @@
 .note-actions button:hover {
   transform: scale(1.2);
 }
-
 
 .floating-delete-btn {
   position: fixed;

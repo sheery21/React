@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
 import OTPModel from "../models/otp.js";
+
 export const signUpContollre = async (req, res) => {
   try {
     const { name, mobileNUmber, email, password } = req.body;
@@ -35,7 +36,7 @@ export const signUpContollre = async (req, res) => {
     await UserModel.create(body);
 
     const OTP = uuidv4().slice(0, 4);
-    console.log("OTP" , OTP);
+    console.log("OTP", OTP);
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       host: "smtp.gmail.com",
@@ -155,7 +156,7 @@ export const signUpContollre = async (req, res) => {
 export const logInContollre = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log ('request' ,req.body);
+    console.log("request", req.body);
     if (!email || !password) {
       return res.json({
         message: "Required fields are missing ",
@@ -163,9 +164,6 @@ export const logInContollre = async (req, res) => {
         data: null,
       });
     }
-
-    
-
 
     const user = await UserModel.findOne({ email });
     if (!user) {
@@ -241,7 +239,7 @@ export const verifyOTPController = async (req, res) => {
     }
 
     await OTPModel.findByIdAndUpdate(isExist._id, { isUsed: true });
-    await UserModel.findOneAndUpdate({ email }, { isVerifisd: true });
+    await UserModel.findOneAndUpdate({ email }, { isVerified: true });
 
     return res.json({
       message: "otp verify",
@@ -264,7 +262,7 @@ export const resendOTPController = async (req, res) => {
       });
     }
 
-    const user = UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) {
       return res.json({
@@ -274,7 +272,7 @@ export const resendOTPController = async (req, res) => {
     }
 
     const OTP = uuidv4().slice(0, 4);
-    console.log("OPT" , OTP);
+    console.log("OPT", OTP);
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       host: "smtp.gmail.com",
@@ -388,6 +386,130 @@ export const resendOTPController = async (req, res) => {
   } catch (error) {
     return res.json({
       message: error.message || "somthing went wrong",
+      status: false,
+    });
+  }
+};
+export const forgetPassOTPController = async (req, res) => {
+  try {
+    const now = new Date();
+    const time = now.toLocaleTimeString();
+
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Required field are missing",
+        status: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res.status(400).json({
+        message: "Invalid Email address",
+        status: false,
+      });
+    }
+
+    const token = jwt.sign(
+      { _id: user._id, email},
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "10m",
+      }
+    );
+
+    const FE_URL = `${process.env.FRONTEND_URL}change-pass?q=${token}`;
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.APP_PASS,
+      },
+    });
+
+    //send verify link
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
+      subject: "Forgot password verify",
+      html: ` <div style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+      <div style="max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px;">
+        
+        <h2 style="text-align: center; color: #333;">Reset Your Password</h2>
+        <p style="color: #555;">
+          You requested to reset your password. Click the button below to set a new password:
+        </p>
+
+        <a href=${FE_URL}
+          style="display: block; width: 200px; margin: 20px auto; padding: 12px 0;
+          background: #4CAF50; color: white; text-align: center;
+          text-decoration: none; border-radius: 6px; font-size: 16px;">
+          Reset Password
+        </a>
+
+        <p style="color: #777; font-size: 14px;">
+          If you didn’t request this, please ignore this email.
+        </p>
+
+        <p style="color: #999; font-size: 12px; text-align:center;">
+          &copy; 2025 Your App Name. All rights reserved.
+        </p>
+
+      </div>
+    </div>`,
+    });
+
+    res.json({
+      message: "please check your email for password reset link",
+      status: true,
+      time
+    });
+  } catch (error) {
+    res.json({
+      message: error.message || "something went wrong",
+      status: false,
+    });
+  }
+};
+export const changePassOTPController = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const now = new Date();
+    const time = now.toLocaleTimeString();
+
+    if (!token || !newPassword) {
+      return res.json({
+        message: "Required field are missing",
+        status: false,
+      });
+    }
+
+    const tokenVerify = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!tokenVerify.email || !tokenVerify._id) {
+      return res.json({
+        message: "Invalid Token",
+        status: false,
+      });
+    }
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    await UserModel.findByIdAndUpdate(tokenVerify._id, {
+      password: hashPassword,
+    });
+    res.json({
+      message: "password changed",
+      status: true,
+      time 
+    });
+  } catch (error) {
+    res.json({
+      message: error.message || "something went wrong",
       status: false,
     });
   }

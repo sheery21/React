@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const OTPSchema = mongoose.Schema({
     otp : {
         type : String ,
-        requied : true
+        required  : true
     },
     email : {
         type : String ,
-        requied : true
+        required  : true
     },
     isUsed : {
         type : Boolean ,

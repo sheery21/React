@@ -1,0 +1,76 @@
+/* Container */
+.forgot-container {
+  min-height: 100vh;
+  background: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Card Box */
+.forgot-box {
+  background: #fff;
+  width: 350px;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Heading */
+.forgot-box h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+/* Label */
+.forgot-box label {
+  display: block;
+  font-size: 14px;
+  color: #444;
+  text-align: left;
+  margin-bottom: 6px;
+}
+
+/* Input */
+.forgot-box input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 15px;
+  transition: 0.2s;
+}
+
+.forgot-box input:focus {
+  border-color: #4a6cf7;
+}
+
+/* Button */
+.forgot-box button {
+  width: 100%;
+  padding: 10px;
+  background: #4a6cf7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.forgot-box button:hover {
+  background: #3a56d4;
+}

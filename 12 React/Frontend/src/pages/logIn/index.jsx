@@ -31,8 +31,11 @@ const LogIn = () => {
       const response = await axios.post(LOGNIN_API, userObj);
       const data = await response.data;
 
-      if (data.status === true && data.user) {
-        const user = data.user;
+      console.log("data" ,data) ;
+      
+
+      if (data.status === true && data.data) {
+        const user = data.data;
         const token = data.token;
         sessionStorage.setItem("user", JSON.stringify(user));
         sessionStorage.setItem("token", token);
@@ -94,6 +97,7 @@ const LogIn = () => {
             required
           />
           <Link to={"/signUp"}>signUp?</Link>
+          <Link to={"/forgot-pass"}>forgotPassword?</Link>
           <Button type="submit" onClick={handleSubmit} text={"Sign In"} />
           {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
           {succcess && (

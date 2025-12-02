@@ -6,6 +6,8 @@ import DashBasrd from "./pages/dashboard";
 import AuthRoute from "./pages/Routes/AuthRoute";
 import PrivateRoute from "./pages/Routes/PrivateRoute";
 import OTPVerification from "./pages/otpVerify";
+import ForgotPassword from "./pages/forgotPassword";
+import ChangePassword from "./pages/changePassword";
 
 function App() {
   return (
@@ -32,6 +34,22 @@ function App() {
           element={
             <AuthRoute>
               < OTPVerification/>
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/forgot-pass"
+          element={
+            <AuthRoute>
+              < ForgotPassword/>
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/change-pass"
+          element={
+            <AuthRoute>
+              < ChangePassword/>
             </AuthRoute>
           }
         />
