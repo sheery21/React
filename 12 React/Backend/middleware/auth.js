@@ -4,8 +4,10 @@ export const authMiddleware = (req, res, next) => {
   try {
     const token = req.headers["authorization"].split(" ")[1];
     const isVerify = jwt.verify(token, process.env.SECRET_KEY);
-    if (isVerify._id) {
-      req.userid = isVerify._id;
+    console.log('isVerify',isVerify);
+    
+    if (isVerify.id) {
+      req.userId = isVerify.id;
       next();
     } else {
       res.status(401).json({

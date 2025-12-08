@@ -6,17 +6,12 @@ const Dashboard = () => {
   const [file, setFile] = useState(null);
   const inputRef = useRef(null);
 
-  console.log("Token:", localStorage.getItem("token"));
-
-  
-
-
   const uploadImage = async () => {
     try {
       const formData = new FormData();
       formData.append("profileImage", file);
 
-      const url = 'http://localhost:3000/api/image/upload';
+      const url = "http://localhost:3000/api/image/upload";
 
       const response = await axios.post(url, formData, {
         headers: {
