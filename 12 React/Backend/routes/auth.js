@@ -1,27 +1,33 @@
 import express from "express";
-import { rateLimit } from 'express-rate-limit'
-import { changePassOTPController, forgetPassOTPController, logInContollre, resendOTPController, signUpContollre, verifyOTPController } from "../controllers/auth.js";
+import { rateLimit } from "express-rate-limit";
+import {
+  changePassOTPController,
+  forgetPassOTPController,
+  logInContollre,
+  resendOTPController,
+  signUpContollre,
+  verifyOTPController,
+} from "../controllers/auth.js";
 
 const authRouthe = express.Router();
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-	ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
-	// store: ... , // Redis, Memcached, etc. See below.
-})
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-8", // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  ipv6Subnet: 56, // Set to 60 or 64 to be less aggressive, or 52 or 48 to be more aggressive
+  // store: ... , // Redis, Memcached, etc. See below.
+});
 
-authRouthe.post("/signUp",limiter, signUpContollre);
+authRouthe.post("/signUp", limiter, signUpContollre);
 
-authRouthe.post("/logIn",limiter,logInContollre);
+authRouthe.post("/logIn", limiter, logInContollre);
 
 //otp
-authRouthe.post("/verify-otp" ,verifyOTPController)
-authRouthe.post("/reset-otp" ,resendOTPController)
-authRouthe.post("/forget-password",limiter ,forgetPassOTPController)
-authRouthe.post("/change-password",limiter ,changePassOTPController)
+authRouthe.post("/verify-otp", verifyOTPController);
+authRouthe.post("/reset-otp", resendOTPController);
+authRouthe.post("/forget-password", limiter, forgetPassOTPController);
+authRouthe.post("/change-password", limiter, changePassOTPController);
 
 export default authRouthe;
-
