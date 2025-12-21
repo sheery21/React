@@ -10,7 +10,7 @@ const DashBoard = () => {
   const [tone, setTone] = useState("Formal");
   const [generating, setGenerating] = useState(false);
   const [queryError, setQueryError] = useState("");
-  const API_URL = "http://localhost:3000/api/chat";
+  const API_URL = "https://react-13-lemon.vercel.app/api/chat";
   const navigate = useNavigate();
 
   useEffect(() => {
