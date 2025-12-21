@@ -6,7 +6,7 @@ import {
   updateTodoContoller,
   getAllTodoContoller,
   deleteOneTodoContoller,
-  deleteAllTodoContoller
+  deleteAllTodoContoller,
 } from "../controllers/note.js";
 
 export const curateRouthe = express.Router();

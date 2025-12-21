@@ -100,7 +100,7 @@ app.post("/logIn", async (request, response) => {
   }
 });
 
-app.post("/createpost", authMiddleware, (request, response) => {
+app.post("/createpost", (request, response) => {
   response.json("API HIT : post Created");
 });
 
