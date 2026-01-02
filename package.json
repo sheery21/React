@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "dotenv": "^17.2.3",
+    "react-redux": "^9.2.0",
+    "sweetalert2": "^11.26.17",
+    "sweetalert2-react-content": "^5.1.1",
     "uuid": "^13.0.0",
     "uuidv4": "^6.2.13"
   }

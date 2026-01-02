@@ -27,7 +27,6 @@ export const signUpContoller = async (req, res) => {
       password: hashPassword,
     };
     await UserModel.create(body);
-    2;
     const OTP = uuidv4().slice(0, 4);
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -42,7 +41,7 @@ export const signUpContoller = async (req, res) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL,
-      to: process.env.EMAIL,
+      to: email,
       subject: "Email verification",
       html: `<!doctype html>
   <html>
@@ -74,7 +73,7 @@ export const signUpContoller = async (req, res) => {
             <!-- Body -->
             <tr>
               <td class="pad" style="padding:28px 32px; color:#243b53;">
-                // <p style="margin:0 0 14px 0; font-size:16px;">Hi ${name} ,</p>
+                <p style="margin:0 0 14px 0; font-size:16px;">Hi ${name} ,</p>
                 <p style="margin:0 0 18px 0; font-size:15px; line-height:1.5;">
                   Thanks for signing up. Please verify your email address to activate your account and get started.
                 </p>
@@ -130,6 +129,7 @@ export const signUpContoller = async (req, res) => {
     const otpObj = {
       otp: OTP,
       email,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     };
     await OTPModel.create(otpObj);
     return res.status(201).json({
