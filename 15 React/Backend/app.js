@@ -4,7 +4,7 @@ import { dbConnect } from "./config/db.js";
 import { authRoute } from "./routes/auth.js";
 import bankRoute from "./routes/bank.js";
 import complaintRoute from "./routes/complaint.js";
-import customerAuth from "./middleware/customer.js";
+import customerAuth from "./middleware/customerAuth.js";
 dotenv.config();
 
 const app = express();

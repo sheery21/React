@@ -28,7 +28,11 @@ export const complaintController = async (req, res) => {
       });
     }
 
-    await ComplaintModel.create({ ...req.body, createdBy: user._id });
+    await ComplaintModel.create({
+      ...req.body,
+      createdBy: user._id,
+      bankId: user.bankId,
+    });
     res.status(200).json({
       message: "Complaint Generated!",
       status: true,
@@ -41,4 +45,3 @@ export const complaintController = async (req, res) => {
     });
   }
 };
-
