@@ -42,3 +42,36 @@ export const complaintController = async (req, res) => {
   }
 };
 
+export const allComplaints = async ( req ,res) =>{
+  try {
+
+    const user = req.user;
+
+    if (!user) {
+      return res.status(400).json({
+        message: "un auth user",
+        status: false,
+        data: null,
+      });
+    }
+
+    console.log( "user" , user);
+    
+
+    const data = await ComplaintModel.find({createdBy : user._id})
+
+    res.status(200).json({
+      message : "Complaint fetched!",
+      status : true,
+      data 
+    })
+
+    
+  } catch (error) {
+    res.status(500).json({
+      message : error.message || "samting went wrong",
+      status : false,
+      data : null
+    })
+  }
+}

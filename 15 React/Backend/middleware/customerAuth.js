@@ -3,6 +3,8 @@ import UserModel from "../models/userModel.js";
 export const customerAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
+    console.log( "token" , token);
+    
     const isVerified = jwt.verify(token, process.env.SECRET_KEY);
     console.log("isVerified", isVerified);
     if (!isVerified) {
