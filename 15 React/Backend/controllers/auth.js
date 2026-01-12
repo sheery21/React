@@ -9,7 +9,7 @@ export const signUpController = async (req, res) => {
   try {
     const { email, password, name, phoneNumber, role, bankId } = req.body;
 
-    if (!email || !password || !name || !phoneNumber || !bankId) {
+    if (!email || !password || !name || !phoneNumber || !bankId || !role) {
       return res.status(400).json({
         message: "required field missing",
         status: false,
@@ -223,7 +223,6 @@ export const verifyOTPController = async (req, res) => {
     }
 
     const isExist = await OtpModel.findOne({ email, otp, isUsed: false });
-    console.log("isExist", isExist);
 
     if (!isExist) {
       return res.status(400).json({
