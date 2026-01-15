@@ -18,8 +18,7 @@ export const complaintController = async (req, res) => {
       !complaintType ||
       !category ||
       !description ||
-      !priority ||
-      !uploadedEvidence
+      !priority
     ) {
       return res.status(400).json({
         message: "requied field missing",
