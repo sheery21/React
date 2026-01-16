@@ -14,12 +14,7 @@ export const complaintController = async (req, res) => {
       });
     }
 
-    if (
-      !complaintType ||
-      !category ||
-      !description ||
-      !priority
-    ) {
+    if (!complaintType || !category || !description || !priority) {
       return res.status(400).json({
         message: "requied field missing",
         status: false,
@@ -27,7 +22,7 @@ export const complaintController = async (req, res) => {
       });
     }
 
-    await ComplaintModel.create({
+    const complaint = await ComplaintModel.create({
       ...req.body,
       createdBy: user._id,
       bankId: user.bankId,
@@ -36,6 +31,7 @@ export const complaintController = async (req, res) => {
     res.status(200).json({
       message: "Complaint Generated!",
       status: true,
+      complaintId: complaint._id,
     });
   } catch (error) {
     return res.status(400).json({

@@ -28,7 +28,13 @@ const complaintSchema = new mongoose.Schema(
       default: "pending",
     },
     uploadedEvidence: {
-      type: Array,
+      type: [
+        {
+          url : String,
+          public_id : String
+        }
+      ],
+      default : []
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

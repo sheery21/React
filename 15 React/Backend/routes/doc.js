@@ -5,6 +5,11 @@ import { upload } from "../middleware/multer.js";
 
 const docRouts = express.Router();
 
-docRouts.post("/upload", customerAuth, upload.any(), docControlers);
+docRouts.post(
+  "/upload/:complaintId",
+  customerAuth,
+  upload.any(),
+  docControlers
+);
 
 export default docRouts;
