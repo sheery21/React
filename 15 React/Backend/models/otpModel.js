@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const OTPSchema  = new mongoose.Schema(
+const OTPSchema = new mongoose.Schema(
   {
     otp: {
       type: String,
@@ -18,6 +18,6 @@ const OTPSchema  = new mongoose.Schema(
   { timestamps: true }
 );
 
-const OtpModel = mongoose.model("otp", OTPSchema );
+const OtpModel = mongoose.model("otp", OTPSchema);
 
 export default OtpModel;

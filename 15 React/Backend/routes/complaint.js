@@ -1,6 +1,9 @@
 import express from "express";
 import customerAuth from "../middleware/customerAuth.js";
-import { allComplaints, complaintController } from "../controllers/complaint.js";
+import {
+  allComplaints,
+  complaintController,
+} from "../controllers/complaint.js";
 
 const complaintRoute = express.Router();
 

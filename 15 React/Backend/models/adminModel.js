@@ -18,10 +18,6 @@ const adminSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    bankId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "bank",
-    },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import UserModel from "../models/userModel.js";
 
-export const bank_officerAuth = async (req, res, next) => {
+export const adminAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const isVerified = jwt.verify(token, process.env.SECRET_KEY);
@@ -13,7 +13,7 @@ export const bank_officerAuth = async (req, res, next) => {
       });
     }
 
-    const user = await UserModel.findById(isVerified.id).select("role bankId");
+    const user = await UserModel.findById({ _id: isVerify.id });
 
     console.log("user", user);
 
@@ -23,7 +23,7 @@ export const bank_officerAuth = async (req, res, next) => {
         status: false,
       });
     }
-    if (user.role === "bank_officer") {
+    if (user.role === "sbp_admin") {
       req.user = user;
       next();
     } else {
