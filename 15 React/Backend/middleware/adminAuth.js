@@ -4,9 +4,9 @@ import UserModel from "../models/userModel.js";
 export const adminAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const isVerified = jwt.verify(token, process.env.SECRET_KEY);
-    console.log("isVerified", isVerified);
-    if (!isVerified) {
+    const isVerify = jwt.verify(token, process.env.SECRET_KEY);
+    console.log("isVerify", isVerify);
+    if (!isVerify) {
       return res.status(401).json({
         message: "UnAuth user",
         status: false,

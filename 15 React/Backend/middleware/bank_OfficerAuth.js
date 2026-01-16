@@ -1,19 +1,20 @@
 import jwt from "jsonwebtoken";
 import UserModel from "../models/userModel.js";
+import BankOfficerModel from "../models/bank_OfficerModel.js";
 
 export const bank_officerAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const isVerified = jwt.verify(token, process.env.SECRET_KEY);
-    console.log("isVerified", isVerified);
-    if (!isVerified) {
+    const isVerify = jwt.verify(token, process.env.SECRET_KEY);
+    console.log("isVerify", isVerify);
+    if (!isVerify) {
       return res.status(401).json({
         message: "UnAuth user",
         status: false,
       });
     }
 
-    const user = await UserModel.findById(isVerified.id).select("role bankId");
+    const user = await BankOfficerModel.findById({ _id: isVerify.id });
 
     console.log("user", user);
 

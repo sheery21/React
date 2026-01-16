@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
+import { bank_officerAuth } from "../middleware/bank_OfficerAuth.js";
+import BankOfficerModel from "../models/bank_OfficerModel.js";
 
 export const signUpController = async (req, res) => {
   try {
@@ -161,7 +163,7 @@ export const logInController = async (req, res) => {
         status: false,
       });
     }
-    const user = await UserModel.findOne({ email });
+    const user = await BankOfficerModel.findOne({ email });
     if (!user) {
       return res.status(401).json({
         message: "Invalid email or password!",
