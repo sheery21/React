@@ -1,6 +1,5 @@
 import { cloudinaryUploder } from "../config/cloudinary.js";
 import ComplaintModel from "../models/ComplaintModel.js";
-// import { GenerateComplaint, MyComplaints } from "../controller/complaint.js";
 
 export const docControlers = async (req, res) => {
   try {
@@ -34,8 +33,7 @@ export const docControlers = async (req, res) => {
         public_id: result.public_id,
       });
     }
-    console.log('uploadedEvidence', uploadedEvidence);
-    
+    console.log("uploadedEvidence", uploadedEvidence);
 
     const complaint = await ComplaintModel.findByIdAndUpdate(
       complaintId,

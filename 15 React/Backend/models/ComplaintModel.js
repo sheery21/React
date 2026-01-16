@@ -30,11 +30,11 @@ const complaintSchema = new mongoose.Schema(
     uploadedEvidence: {
       type: [
         {
-          url : String,
-          public_id : String
-        }
+          url: String,
+          public_id: String,
+        },
       ],
-      default : []
+      default: [],
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
