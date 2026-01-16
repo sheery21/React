@@ -1,5 +1,6 @@
 import { cloudinaryUploder } from "../config/cloudinary.js";
 import ComplaintModel from "../models/ComplaintModel.js";
+import fs from "fs";
 
 export const docControlers = async (req, res) => {
   try {
@@ -57,5 +58,13 @@ export const docControlers = async (req, res) => {
       status: false,
       data: null,
     });
+  } finally {
+    if (req.files && req.files.length > 0) {
+      req.files.forEach((file) => {
+        if (fs.existsSync(file.path)) {
+          fs.unlinkSync(file.path);
+        }
+      });
+    }
   }
 };
