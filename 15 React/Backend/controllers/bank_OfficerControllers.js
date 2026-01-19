@@ -27,3 +27,29 @@ export const bank_OfficerControllers = async (req, res) => {
   }
 };
 
+export const bank_Officer_updateControllers = (req, res) => {
+  try {
+    const { Cid } = req.params;
+
+    const { status } = req.body;
+
+    console.log("req Cid", Cid);
+    console.log("status", status);
+
+    const data = ComplaintModel.findByIdAndUpdate(
+      { id: Cid },
+      { status },
+      { new: true },
+    );
+    res.status(200).json({
+      message: "complaints status updated!",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || "something went wrong",
+      status: false,
+      data: null,
+    });
+  }
+};
