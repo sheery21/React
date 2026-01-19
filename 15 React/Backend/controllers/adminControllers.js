@@ -2,10 +2,10 @@ import ComplaintModel from "../models/ComplaintModel.js";
 
 export const adminControllers = async (req, res) => {
   try {
-    const user = req.user;
-    console.log("user ", user);
+    const admin = req.admin;
+    console.log("admin ", admin);
 
-    if (!user) {
+    if (!admin) {
       return res.status(400).json({
         message: "un auth user",
         status: false,
@@ -13,7 +13,9 @@ export const adminControllers = async (req, res) => {
       });
     }
 
-    const data = await ComplaintModel.find({ bankId: user.bankId });
+    const data = await ComplaintModel.find()
+      .populate("bankId", "name")
+      .populate("createdBy", "name email");
 
     res.status(200).json({
       message: "complaints fetch",

@@ -6,7 +6,7 @@ export const bank_officerAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const isVerify = jwt.verify(token, process.env.SECRET_KEY);
-    console.log("isVerify", isVerify);
+
     if (!isVerify) {
       return res.status(401).json({
         message: "UnAuth user",
@@ -15,8 +15,6 @@ export const bank_officerAuth = async (req, res, next) => {
     }
 
     const user = await BankOfficerModel.findById({ _id: isVerify.id });
-
-    console.log("user", user);
 
     if (!user) {
       return res.status(401).json({
@@ -33,7 +31,6 @@ export const bank_officerAuth = async (req, res, next) => {
         status: false,
       });
     }
-    console.log("isVerify", user);
   } catch (error) {
     return res.status(401).json({
       message: "UnAuth user",
