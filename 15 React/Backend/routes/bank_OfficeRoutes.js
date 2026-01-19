@@ -14,7 +14,7 @@ bank_OfficerRouter.get(
 );
 
 bank_OfficerRouter.put(
-  "/update-complaint/:Cid",
+  "/updateComplaint/:Cid",
   bank_officerAuth,
   bank_Officer_updateControllers,
 );

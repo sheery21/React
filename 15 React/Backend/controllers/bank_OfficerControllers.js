@@ -27,7 +27,7 @@ export const bank_OfficerControllers = async (req, res) => {
   }
 };
 
-export const bank_Officer_updateControllers = (req, res) => {
+export const bank_Officer_updateControllers = async (req, res) => {
   try {
     const { Cid } = req.params;
 
@@ -36,8 +36,8 @@ export const bank_Officer_updateControllers = (req, res) => {
     console.log("req Cid", Cid);
     console.log("status", status);
 
-    const data = ComplaintModel.findByIdAndUpdate(
-      { id: Cid },
+    const data = await ComplaintModel.findByIdAndUpdate(
+      Cid,
       { status },
       { new: true },
     );
