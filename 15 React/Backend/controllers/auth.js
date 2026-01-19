@@ -6,6 +6,7 @@ import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { bank_officerAuth } from "../middleware/bank_OfficerAuth.js";
 import BankOfficerModel from "../models/bank_OfficerModel.js";
+import AdminModel from "../models/adminModel.js";
 
 export const signUpController = async (req, res) => {
   try {
@@ -368,7 +369,7 @@ export const logInWithAdminController = async (req, res) => {
         status: false,
       });
     }
-    const user = await BankOfficerModel.findOne({ email });
+    const user = await AdminModel.findOne({ email });
     if (!user) {
       return res.status(401).json({
         message: "Invalid email or password!",

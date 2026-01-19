@@ -3,6 +3,6 @@ import { adminControllers } from "../controllers/adminControllers.js";
 
 const adminRouter = express.Router();
 
-adminRouter.get("/get-complaints", adminControllers);
+adminRouter.get("/getComplaints/", adminControllers);
 
 export default adminRouter;
