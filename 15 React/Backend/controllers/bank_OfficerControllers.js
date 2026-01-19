@@ -37,7 +37,7 @@ export const bank_Officer_updateControllers = async (req, res) => {
     console.log("status", status);
 
     const data = await ComplaintModel.findByIdAndUpdate(
-      Cid,
+      Cid ,
       { status },
       { new: true },
     );
