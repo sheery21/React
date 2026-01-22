@@ -7,8 +7,13 @@ export const adminAuth = async (req, res, next) => {
     if (!token) return res.status(401).json({ message: "No token" });
     const isVerify = jwt.verify(token, process.env.SECRET_KEY);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
+=======
+    console.log("isVerify" , isVerify);
+    
+>>>>>>> a7e41c4afed9386cb055a56215291b3a58524627
 =======
     console.log("isVerify" , isVerify);
     
@@ -23,7 +28,11 @@ export const adminAuth = async (req, res, next) => {
     const admin = await AdminModel.findById({ _id: isVerify.id });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     console.log("admin", admin);
+=======
+    console.log("admin" , admin);
+>>>>>>> a7e41c4afed9386cb055a56215291b3a58524627
 =======
     console.log("admin" , admin);
 >>>>>>> a7e41c4afed9386cb055a56215291b3a58524627
