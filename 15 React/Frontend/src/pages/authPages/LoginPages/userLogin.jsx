@@ -1,8 +1,9 @@
 // src/pages/UserLogin.jsx
-import React from "react";
-import LoginForm from "../../components/auth/LoginForm/LoginForm";
+import LoginForm from "../../../components/auth/LoginForm";
 
 
-const UserLogin = () => <LoginForm role="User" />;
+export const UserLogin = () => <LoginForm role="User" />;
 
-export default UserLogin;
+export const BankOfficerLogin = () => <LoginForm role="Bank Officer" />;
+
+export const AdminLogin = () => <LoginForm role="Admin" />;

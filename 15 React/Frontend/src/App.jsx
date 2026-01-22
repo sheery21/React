@@ -1,19 +1,19 @@
-import { Route, Router, Routes } from "react-router-dom";
+import { Route,  Routes } from "react-router-dom";
 import "./App.css";
-import UserLogin from "./pages/authPages/LoginPages/userLogin";
-import BankOfficerLogin from "./pages/authPages/LoginPages/bankOfficreLogin";
-import AdminLogin from "./pages/authPages/LoginPages/adminLogin";
+import {
+  UserLogin,
+  BankOfficerLogin,
+  AdminLogin,
+} from "./pages/authPages/LoginPages/userLogin";
 
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/user-login" element={<UserLogin />} />
-          <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/user-login" element={<UserLogin />} />
+        <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+      </Routes>
     </>
   );
 }
