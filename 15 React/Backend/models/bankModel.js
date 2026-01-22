@@ -11,9 +11,9 @@ const bankSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const BankModel = mongoose.model("Banks", bankSchema);
+const BankModel = mongoose.model("bank", bankSchema);
 
 export default BankModel;
