@@ -6,14 +6,14 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-gray-100 shadow-md">
+      <header className="bg-primary shadow-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
           <div className="flex items-center space-x-4">
-            <img src={Logo} alt="State Bank of Pakistan" className="h-16 w-auto" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">State Bank of Pakistan</h1>
-              <p className="text-sm text-gray-600">بینک دولت پاکستان</p>
-            </div>
+            <img
+              src={Logo}
+              alt="State Bank of Pakistan"
+              className="h-16 w-auto"
+            />
           </div>
         </div>
       </header>
@@ -24,7 +24,9 @@ const LandingPage = () => {
           Welcome to State Bank of Pakistan
         </h2>
         <p className="text-lg text-gray-700 mb-6 max-w-xl">
-          This is the official landing page of the State Bank of Pakistan. You can access banking services, learn about monetary policies, and find official announcements.
+          This is the official landing page of the State Bank of Pakistan. You
+          can access banking services, learn about monetary policies, and find
+          official announcements.
         </p>
 
         <div className="space-x-4">
@@ -51,7 +53,8 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="bg-gray-100 text-center p-4 text-gray-600">
-        &copy; {new Date().getFullYear()} State Bank of Pakistan. All rights reserved.
+        &copy; {new Date().getFullYear()} State Bank of Pakistan. All rights
+        reserved.
       </footer>
     </div>
   );
