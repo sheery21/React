@@ -1,6 +1,8 @@
 // src/components/auth/SignupForm.jsx
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { sigUpThunk } from "../../store/features/auth.thunk";
 
 const roles = [
   { label: "Customer", value: "customer" },
@@ -9,6 +11,10 @@ const roles = [
 ];
 
 const SignupForm = () => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.authReducer);
+
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,6 +23,7 @@ const SignupForm = () => {
     confirmPassword: "",
     role: "customer",
   });
+  console.log("loading", loading);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,6 +45,8 @@ const SignupForm = () => {
       role: formData.role,
     };
 
+    dispatch(sigUpThunk(payload));
+
     console.log("Signup Payload:", payload);
     alert("Signup attempted");
   };
@@ -55,9 +64,7 @@ const SignupForm = () => {
             <button
               key={r.value}
               type="button"
-              onClick={() =>
-                setFormData({ ...formData, role: r.value })
-              }
+              onClick={() => setFormData({ ...formData, role: r.value })}
               className={`flex-1 py-2 text-sm font-medium rounded-md transition
                 ${
                   formData.role === r.value

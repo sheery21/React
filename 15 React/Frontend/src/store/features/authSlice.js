@@ -7,18 +7,20 @@ const authSlice = createSlice({
     loading: false,
     error: null,
     user: null,
-    token: "",
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(sigUpThunk.pending, (state, { payload }) => {
+    builder.addCase(sigUpThunk.pending, (state) => {
       state.loading = true;
+      state.error = null;
     });
     builder.addCase(sigUpThunk.fulfilled, (state, { payload }) => {
       state.loading = true;
+      state.user = payload;
     });
     builder.addCase(sigUpThunk.rejected, (state, { payload }) => {
       state.loading = true;
+      state.error = payload;
     });
   },
 });
