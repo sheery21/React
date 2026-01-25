@@ -1,8 +1,9 @@
 // src/components/auth/SignupForm.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { sigUpThunk } from "../../store/features/auth.thunk";
+import axios from "axios";
 
 const roles = [
   { label: "Customer", value: "customer" },
@@ -13,7 +14,8 @@ const roles = [
 const SignupForm = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.authReducer);
-
+  const URL_ALL_BANKS = import.meta.env.VITE_LOCAL_HOST_ALL_BANKS_API;
+  const [banks, setBanks] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -22,11 +24,29 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
     role: "customer",
+    bankId: null,
   });
   console.log("loading", loading);
 
+  useEffect(() => {
+    const fetchBanks = async () => {
+      try {
+        const res = await axios.get(URL_ALL_BANKS);
+        const { data } = await res.data;
+        setBanks(data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchBanks();
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleBankSelect = (bankId) => {
+    setFormData({ ...formData, bankId });
   };
 
   const handleSubmit = (e) => {
@@ -37,12 +57,18 @@ const SignupForm = () => {
       return;
     }
 
+    if (formData.role === "customer" && !formData.bankId) {
+      alert("Please select your bank");
+      return;
+    }
+
     const payload = {
       name: formData.name,
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       password: formData.password,
       role: formData.role,
+      bankId: formData.role === "customer" ? formData.bankId : null,
     };
 
     dispatch(sigUpThunk(payload));
@@ -116,6 +142,36 @@ const SignupForm = () => {
               required
             />
           </div>
+
+          {formData.role === "customer" && (
+            <div className="p-4">
+              <h2 className="text-xl font-bold text-primary mb-3 text-center">
+                Select Your Bank
+              </h2>
+
+              <select
+                name="bankId"
+                value={formData.bankId || ""}
+                onChange={handleChange}
+                className="w-full border rounded p-2 bg-white text-gray-800 focus:ring-2 focus:ring-primary"
+                required
+              >
+                <option value="">-- Select Bank --</option>
+                {Array.isArray(banks) &&
+                  banks.map((bank) => (
+                    <option key={bank._id} value={bank._id}>
+                      {bank.bankName} ({bank.bankCode})
+                    </option>
+                  ))}
+              </select>
+
+              {!formData.bankId && (
+                <p className="text-sm text-red-500 mt-2 text-center">
+                  Please select a bank
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Password */}
           <div>
