@@ -91,12 +91,12 @@ const SignupForm = () => {
               key={r.value}
               type="button"
               onClick={() => setFormData({ ...formData, role: r.value })}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition
-                ${
-                  formData.role === r.value
-                    ? "bg-primary text-white shadow"
-                    : "text-gray-600 hover:bg-gray-200"
-                }`}
+              className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition
+        ${
+          formData.role === r.value
+            ? "bg-primary text-white shadow"
+            : "text-gray-600 hover:bg-gray-200"
+        }`}
             >
               {r.label}
             </button>
@@ -144,16 +144,14 @@ const SignupForm = () => {
           </div>
 
           {formData.role === "customer" && (
-            <div className="p-4">
-              <h2 className="text-xl font-bold text-primary mb-3 text-center">
-                Select Your Bank
-              </h2>
+            <div className="relative">
+              <label className="block mb-1 font-medium">Select Bank</label>
 
               <select
                 name="bankId"
                 value={formData.bankId || ""}
                 onChange={handleChange}
-                className="w-full border rounded p-2 bg-white text-gray-800 focus:ring-2 focus:ring-primary"
+                className="w-full border p-2 rounded bg-white focus:ring-2 focus:ring-primary"
                 required
               >
                 <option value="">-- Select Bank --</option>
@@ -164,12 +162,6 @@ const SignupForm = () => {
                     </option>
                   ))}
               </select>
-
-              {!formData.bankId && (
-                <p className="text-sm text-red-500 mt-2 text-center">
-                  Please select a bank
-                </p>
-              )}
             </div>
           )}
 
