@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { sigUpThunk } from "../../store/features/auth.thunk";
+import {
+  signUpWihtBank_Officer,
+  signUpWith_Admin,
+  sigUpThunk,
+} from "../../store/features/auth.thunk";
 import axios from "axios";
 
 const roles = [
@@ -28,6 +32,12 @@ const SignupForm = () => {
   });
   console.log("loading", loading);
 
+  const loginRoutes = {
+    customer: "/user-login",
+    bank_officer: "/bank-officer-login",
+    sbp_admin: "/admin-login",
+  };
+
   useEffect(() => {
     const fetchBanks = async () => {
       try {
@@ -45,20 +55,30 @@ const SignupForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleBankSelect = (bankId) => {
-    setFormData({ ...formData, bankId });
-  };
+  // const handleBankSelect = (bankId) => {
+  //   setFormData({ ...formData, bankId });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+    if (formData.role === "customer" && !formData.bankId) {
+      alert("Please select your bank");
       return;
     }
 
-    if (formData.role === "customer" && !formData.bankId) {
+    if (formData.role === "bank_officer" && !formData.bankId) {
       alert("Please select your bank");
+      return;
+    }
+
+    if (
+      formData.role === "customer" &&
+      formData.password !== formData.confirmPassword
+    ) {
+      alert("Passwords do not match!");
+      console.log("Passwords do not match!");
+
       return;
     }
 
@@ -68,18 +88,29 @@ const SignupForm = () => {
       phoneNumber: formData.phoneNumber,
       password: formData.password,
       role: formData.role,
-      bankId: formData.role === "customer" ? formData.bankId : null,
+      bankId:
+        formData.role === "customer" || formData.role === "bank_officer"
+          ? formData.bankId
+          : null,
     };
 
-    dispatch(sigUpThunk(payload));
+    console.log("formData", formData);
+
+    if (formData.role === "bank_officer") {
+      dispatch(signUpWihtBank_Officer(payload));
+    } else if (formData.role === "amdmin") {
+      dispatch(signUpWith_Admin(payload));
+    } else {
+      dispatch(sigUpThunk(payload));
+    }
 
     console.log("Signup Payload:", payload);
     alert("Signup attempted");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-screen flex items-start justify-center bg-gray-100 py-10 px-3">
+      <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-6 text-primary text-center">
           Signup
         </h2>
@@ -131,19 +162,23 @@ const SignupForm = () => {
           </div>
 
           {/* Phone */}
-          <div>
-            <label className="block mb-1 font-medium">Phone Number</label>
-            <input
-              type="text"
-              name="phoneNumber"
-              className="w-full border p-2 rounded focus:ring-2 focus:ring-primary"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {(formData.role === "customer" ||
+            formData.role === "bank_officer") && (
+            <div>
+              <label className="block mb-1 font-medium">Phone Number</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                className="w-full border p-2 rounded focus:ring-2 focus:ring-primary"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
 
-          {formData.role === "customer" && (
+          {(formData.role === "customer" ||
+            formData.role == "bank_officer") && (
             <div className="relative">
               <label className="block mb-1 font-medium">Select Bank</label>
 
@@ -179,17 +214,19 @@ const SignupForm = () => {
           </div>
 
           {/* Confirm Password */}
-          <div>
-            <label className="block mb-1 font-medium">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              className="w-full border p-2 rounded focus:ring-2 focus:ring-primary"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {formData.role === "customer" && (
+            <div>
+              <label className="block mb-1 font-medium">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                className="w-full border p-2 rounded focus:ring-2 focus:ring-primary"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          )}
 
           <button
             type="submit"
@@ -201,7 +238,7 @@ const SignupForm = () => {
 
         <div className="mt-4 text-center text-sm">
           <Link
-            to={`/${formData.role}-login`}
+            to={loginRoutes[formData.role]}
             className="text-primary hover:underline"
           >
             Already have an account?
