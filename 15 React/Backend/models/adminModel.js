@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const adminSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -17,10 +21,6 @@ const adminSchema = new mongoose.Schema(
     isVerified: {
       type: Boolean,
       default: false,
-    },
-    bankId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "bank",
     },
   },
   { timestamps: true },
