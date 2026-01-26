@@ -215,9 +215,9 @@ export const logInController = async (req, res) => {
 
 export const signUpWithAdminController = async (req, res) => {
   try {
-    const { email, password, name, phoneNumber, role, bankId } = req.body;
+    const { email, password, name, role } = req.body;
 
-    if (!email || !password || !name || !phoneNumber || !bankId || !role) {
+    if (!email || !password || !name || !role) {
       return res.status(400).json({
         message: "required field missing",
         status: false,

@@ -82,23 +82,25 @@ const SignupForm = () => {
       return;
     }
 
-    const payload = {
-      name: formData.name,
+    let payload = {
       email: formData.email,
-      phoneNumber: formData.phoneNumber,
       password: formData.password,
+      name: formData.name,
       role: formData.role,
-      bankId:
-        formData.role === "customer" || formData.role === "bank_officer"
-          ? formData.bankId
-          : null,
     };
 
-    console.log("formData", formData);
+    if (formData.role === "customer" || formData.role === "bank_officer") {
+      payload = {
+        ...payload,
+        name: formData.name,
+        phoneNumber: formData.phoneNumber,
+        bankId: formData.bankId,
+      };
+    }
 
     if (formData.role === "bank_officer") {
       dispatch(signUpWihtBank_Officer(payload));
-    } else if (formData.role === "amdmin") {
+    } else if (formData.role === "sbp_admin") {
       dispatch(signUpWith_Admin(payload));
     } else {
       dispatch(sigUpThunk(payload));
@@ -136,6 +138,7 @@ const SignupForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
+
           <div>
             <label className="block mb-1 font-medium">Full Name</label>
             <input
