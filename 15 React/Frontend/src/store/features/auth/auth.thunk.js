@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+// SignUp Thunk
 export const sigUpThunk = createAsyncThunk(
   "auth/signUp",
   async (payload, { rejectWithValue }) => {
     try {
-      console.log("payload", payload);
       const url = import.meta.env.VITE_LOCAL_HOST_SIGNUP_API;
       const res = await axios.post(url, payload);
 
@@ -24,7 +25,6 @@ export const signUpWihtBank_Officer = createAsyncThunk(
   "auth/signUp/Bank_Officer",
   async (payload, { rejectWithValue }) => {
     try {
-      console.log("payload", payload);
       const url = import.meta.env.VITE_LOCAL_HOST_SIGNUP_WITH_BANK_OFFICER_API;
       const res = await axios.post(url, payload);
 
@@ -56,3 +56,10 @@ export const signUpWith_Admin = createAsyncThunk(
     }
   },
 );
+
+// LogIn Thunk
+
+export const logIn_Thunk = createAsyncThunk(
+  "/api/auth/logIn"
+  
+)

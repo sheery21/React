@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-import {
-  signUpWihtBank_Officer,
-  signUpWith_Admin,
-  sigUpThunk,
-} from "./auth.thunk";
+import { signUpWihtBank_Officer, signUpWith_Admin, sigUpThunk } from "./auth.thunk";
+
 
 const authSlice = createSlice({
   name: "auth",
@@ -55,7 +52,7 @@ const authSlice = createSlice({
     builder.addCase(signUpWith_Admin.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.user = payload;
-      state.success = false;
+      state.success = true;
     });
     builder.addCase(signUpWith_Admin.rejected, (state, { payload }) => {
       state.loading = false;

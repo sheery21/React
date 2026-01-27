@@ -232,6 +232,12 @@ export const signUpWithAdminController = async (req, res) => {
         status: false,
       });
     }
+     if (!email.includes("SBPadmin.com")) {
+      return res.status(400).json({
+        message: `Admin email must include anmin code`,
+        status: false,
+      });
+    }
 
     const hashPassword = await bcrypt.hash(password, 10);
 

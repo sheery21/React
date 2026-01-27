@@ -1,12 +1,13 @@
 // src/components/auth/SignupForm.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import {
   signUpWihtBank_Officer,
   signUpWith_Admin,
   sigUpThunk,
-} from "../../store/features/auth.thunk";
+} from "../../store/features/auth/auth.thunk";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -31,7 +32,8 @@ const SignupForm = () => {
     role: "customer",
     bankId: null,
   });
-  console.log("loading", loading);
+
+  const navigate = useNavigate();
 
   const loginRoutes = {
     customer: "/user-login",
@@ -89,15 +91,30 @@ const SignupForm = () => {
     fetchBanks();
   }, []);
 
+  useEffect(() => {
+    if (success) {
+      Swal.fire({
+        icon: "success",
+        title: "Account Created 🎉",
+        text: "Redirecting to login...",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      setTimeout(() => {
+        navigate(loginRoutes[formData.role]);
+      }, 2000);
+    }
+  }, [success]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
 
-    if (!formData.bankId && formData.role !== "sbp_admin") {
+    if (formData.role === "bank_officer" && !formData.bankId) {
       Swal.fire({
         icon: "warning",
         title: "Bank Required",
@@ -156,7 +173,17 @@ const SignupForm = () => {
             <button
               key={r.value}
               type="button"
-              onClick={() => setFormData({ ...formData, role: r.value })}
+              onClick={() =>
+                setFormData({
+                  name: "",
+                  email: "",
+                  phoneNumber: "",
+                  password: "",
+                  confirmPassword: "",
+                  bankId: null,
+                  role: r.value,
+                })
+              }
               className={`flex-1 py-2 text-xs sm:text-sm font-medium rounded-md transition
         ${
           formData.role === r.value
