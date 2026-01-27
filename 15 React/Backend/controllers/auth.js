@@ -224,6 +224,13 @@ export const signUpWithAdminController = async (req, res) => {
       });
     }
 
+    if (!email.includes("admin.com")) {
+      return res.status(400).json({
+        message: `admin email must include code`,
+        status: false,
+      });
+    }
+
     const user = await AdminModel.findOne({ email });
 
     if (user) {
