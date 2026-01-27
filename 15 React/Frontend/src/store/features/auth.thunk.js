@@ -7,14 +7,15 @@ export const sigUpThunk = createAsyncThunk(
     try {
       console.log("payload", payload);
       const url = import.meta.env.VITE_LOCAL_HOST_SIGNUP_API;
-      console.log("url", url);
-
       const res = await axios.post(url, payload);
-      console.log("response", res);
 
       return res.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
     }
   },
 );
@@ -25,14 +26,15 @@ export const signUpWihtBank_Officer = createAsyncThunk(
     try {
       console.log("payload", payload);
       const url = import.meta.env.VITE_LOCAL_HOST_SIGNUP_WITH_BANK_OFFICER_API;
-      console.log("url", url);
-
       const res = await axios.post(url, payload);
-      console.log("response", res);
 
       return res.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
     }
   },
 );
@@ -42,12 +44,15 @@ export const signUpWith_Admin = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const url = import.meta.env.VITE_LOCAL_HOST_SIGNUP_WITH_ADMIN_API;
-
       const res = await axios.post(url, payload);
 
       return res.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
     }
   },
 );

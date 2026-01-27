@@ -8,6 +8,7 @@ import {
   sigUpThunk,
 } from "../../store/features/auth.thunk";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const roles = [
   { label: "Customer", value: "customer" },
@@ -17,7 +18,7 @@ const roles = [
 
 const SignupForm = () => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.authReducer);
+  const { loading, error, success } = useSelector((state) => state.authReducer);
   const URL_ALL_BANKS = import.meta.env.VITE_LOCAL_HOST_ALL_BANKS_API;
   const [banks, setBanks] = useState([]);
 
@@ -39,6 +40,43 @@ const SignupForm = () => {
   };
 
   useEffect(() => {
+    if (loading) {
+      Swal.fire({
+        title: "Creating account...",
+        text: "Please wait",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else {
+      Swal.close();
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Signup Failed",
+        text: error.message || "Something went wrong",
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      Swal.fire({
+        icon: "success",
+        title: "Account Created 🎉",
+        text: "You can now login",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
+  }, [success]);
+
+  useEffect(() => {
     const fetchBanks = async () => {
       try {
         const res = await axios.get(URL_ALL_BANKS);
@@ -55,20 +93,16 @@ const SignupForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleBankSelect = (bankId) => {
-  //   setFormData({ ...formData, bankId });
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    
 
-    if (formData.role === "customer" && !formData.bankId) {
-      alert("Please select your bank");
-      return;
-    }
-
-    if (formData.role === "bank_officer" && !formData.bankId) {
-      alert("Please select your bank");
+    if (!formData.bankId && formData.role !== "sbp_admin") {
+      Swal.fire({
+        icon: "warning",
+        title: "Bank Required",
+        text: "Please select your bank",
+      });
       return;
     }
 
@@ -76,9 +110,11 @@ const SignupForm = () => {
       formData.role === "customer" &&
       formData.password !== formData.confirmPassword
     ) {
-      alert("Passwords do not match!");
-      console.log("Passwords do not match!");
-
+      Swal.fire({
+        icon: "error",
+        title: "Password Mismatch",
+        text: "Passwords do not match",
+      });
       return;
     }
 
@@ -105,9 +141,6 @@ const SignupForm = () => {
     } else {
       dispatch(sigUpThunk(payload));
     }
-
-    console.log("Signup Payload:", payload);
-    alert("Signup attempted");
   };
 
   return (
