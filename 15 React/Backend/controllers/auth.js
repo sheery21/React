@@ -239,7 +239,7 @@ export const signUpWithAdminController = async (req, res) => {
         status: false,
       });
     }
-     if (!email.includes("SBPadmin.com")) {
+    if (!email.includes("SBPadmin.com")) {
       return res.status(400).json({
         message: `Admin email must include anmin code`,
         status: false,
@@ -656,6 +656,11 @@ export const verifyOTPController = async (req, res) => {
     }
 
     const isExist = await OtpModel.findOne({ email, otp, isUsed: false });
+
+    console.log("email", email);
+    console.log("otp", otp);
+
+    console.log("isExist", isExist);
 
     if (!isExist) {
       return res.status(400).json({

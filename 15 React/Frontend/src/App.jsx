@@ -14,7 +14,9 @@ import {
   UserSignup,
 } from "./pages/authPages/signUpPage/SignupPage";
 import {
-  UserOtp,
+  Admin_Otp,
+  BankOfficer_Otp,
+  User_Otp,
 } from "./pages/authPages/otpVerifation/otpVariPage";
 
 function App() {
@@ -33,7 +35,9 @@ function App() {
         <Route path="/admin-signup" element={<AdminSignup />} />
 
         {/* OtpVerification Pages */}
-        <Route path="/user-otp" element={<UserOtp />} />
+        <Route path="/user-otp" element={<User_Otp />} />
+        <Route path="/bankOfficer-otp" element={<BankOfficer_Otp />} />
+        <Route path="/admin-otp" element={<Admin_Otp />} />
 
         {/* ForgetPassword Pages */}
         <Route path="/forgot-password" element={<ForgotPassword />} />

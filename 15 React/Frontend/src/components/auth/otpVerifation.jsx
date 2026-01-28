@@ -1,20 +1,48 @@
-import React, { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { userOtp } from "../../store/features/auth/auth.thunk";
+import Swal from "sweetalert2";
 
 const OtpVerification = ({ role }) => {
   const [otp, setOtp] = useState("");
-  // const dispatch = useDispatch()
-  // const {loading , success , error } = useSelector( (state) => state.authReducer)
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, success, error } = useSelector((state) => state.authReducer);
+  useEffect(() => {
+    if (success) {
+      Swal.fire("Success", "OTP Verified Successfully", "success");
+
+      // role based redirect
+      if (role === "customer") navigate("/user-login");
+      if (role === "bank_officer") navigate("/bank-officer-login");
+      if (role === "sbp_admin") navigate("/admin-login");
+    }
+    if (error) {
+      Swal.fire("Error", error?.message || "Invalid OTP", "error");
+    }
+  }, [success, error, navigate, role]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (otp.length !== 4) {
-      alert("Please enter 4 digit OTP");
+    if (!email) {
+      Swal.fire("Error", "Email is required", "error");
       return;
     }
 
-    alert(`${role} OTP verified: ${otp}`);
+    if (otp.length !== 4) {
+      Swal.fire("Error", "Please enter 4 digit OTP", "error");
+      return;
+    }
+
+    const payload ={
+      email,
+      otp,
+    }
+    dispatch(userOtp(payload));
+
   };
 
   return (
@@ -30,10 +58,17 @@ const OtpVerification = ({ role }) => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <input
             type="text"
             maxLength="4"
             value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+            onChange={(e) => setOtp(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))}
             className="w-full text-center tracking-widest text-xl border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="• • • •"
           />
@@ -42,7 +77,7 @@ const OtpVerification = ({ role }) => {
             type="submit"
             className="w-full bg-primary text-white py-2 rounded hover:bg-secondary transition"
           >
-            Verify OTP
+            {loading ? "Verifying..." : "Veify OTP"}
           </button>
         </form>
 
