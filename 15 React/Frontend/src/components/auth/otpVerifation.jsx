@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { userOtp } from "../../store/features/auth/auth.thunk";
 import Swal from "sweetalert2";
 
-const OtpVerification = ({ role }) => {
+const OtpVerification = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, success, error } = useSelector((state) => state.authReducer);
+  const { loading, success, error , user } = useSelector((state) => state.authReducer);
+  const location = useLocation();
+  const role = location.state?.role;
+
   useEffect(() => {
     if (success) {
       Swal.fire("Success", "OTP Verified Successfully", "success");
@@ -22,10 +25,13 @@ const OtpVerification = ({ role }) => {
     if (error) {
       Swal.fire("Error", error?.message || "Invalid OTP", "error");
     }
-  }, [success, error, navigate, role]);
+  }, [success, error, navigate ,role]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    console.log("OTP response user:", user);
+    
 
     if (!email) {
       Swal.fire("Error", "Email is required", "error");
@@ -37,12 +43,11 @@ const OtpVerification = ({ role }) => {
       return;
     }
 
-    const payload ={
+    const payload = {
       email,
       otp,
-    }
+    };
     dispatch(userOtp(payload));
-
   };
 
   return (
@@ -68,7 +73,9 @@ const OtpVerification = ({ role }) => {
             type="text"
             maxLength="4"
             value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))}
+            onChange={(e) =>
+              setOtp(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+            }
             className="w-full text-center tracking-widest text-xl border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="• • • •"
           />

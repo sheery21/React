@@ -66,7 +66,6 @@ const SignupForm = () => {
     }
   }, [error]);
 
-
   useEffect(() => {
     const fetchBanks = async () => {
       try {
@@ -91,7 +90,11 @@ const SignupForm = () => {
       });
 
       setTimeout(() => {
-        navigate(loginRoutes[formData.role]);
+        navigate(loginRoutes[formData.role], {
+          state: {
+            role: formData.role,
+          },
+        });
       }, 2000);
     }
   }, [success]);
