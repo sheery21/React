@@ -36,9 +36,9 @@ const SignupForm = () => {
   const navigate = useNavigate();
 
   const loginRoutes = {
-    customer: "/user-login",
-    bank_officer: "/bank-officer-login",
-    sbp_admin: "/admin-login",
+    customer: "/user-otp",
+    bank_officer: "/bankOfficer-otp",
+    sbp_admin: "/admin-otp",
   };
 
   useEffect(() => {
@@ -66,17 +66,6 @@ const SignupForm = () => {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (success) {
-      Swal.fire({
-        icon: "success",
-        title: "Account Created 🎉",
-        text: "You can now login",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    }
-  }, [success]);
 
   useEffect(() => {
     const fetchBanks = async () => {
