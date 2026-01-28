@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-import { signUpWihtBank_Officer, signUpWith_Admin, sigUpThunk } from "./auth.thunk";
+import { logIn_Thunk, signUpWihtBank_Officer, signUpWith_Admin, sigUpThunk, userOtp } from "./auth.thunk";
 
 
 const authSlice = createSlice({
@@ -10,6 +10,7 @@ const authSlice = createSlice({
     error: null,
     user: null,
     success: false,
+    token : null
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -59,6 +60,37 @@ const authSlice = createSlice({
       state.error = payload;
       state.success = false;
     });
+    builder.addCase(logIn_Thunk.pending , (state) =>{
+      state.loading = true;
+      state.error = null;
+      state.success = false;
+    })
+     builder.addCase(logIn_Thunk.fulfilled , (state , {payload}) =>{
+      state.loading = false;
+      state.user = payload;
+      state.token =  payload;
+      state.success = true;
+    })
+    builder.addCase(logIn_Thunk.rejected , (state , {payload}) =>{
+     state.loading = true;
+     state.error = payload;
+     state.success = false;
+   })
+   builder.addCase(userOtp.pending , (state) => {
+    state.loading = true
+    state.error = null 
+    state.success = false 
+  })
+   builder.addCase(userOtp.fulfilled , (state , {payload}) => {
+    state.loading = false
+    state.user = payload
+    state.success = true 
+  })
+   builder.addCase(userOtp.rejected , (state , {payload}) => {
+    state.loading = false
+    state.error = payload
+    state.success = false
+  })
   },
 });
 
