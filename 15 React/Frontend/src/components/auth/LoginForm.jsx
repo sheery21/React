@@ -1,15 +1,30 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector, } from "react-redux";
 import { Link } from "react-router-dom";
+import { logIn_Thunk } from "../../store/features/auth/auth.thunk";
 
 const LoginForm = ({ role }) => {
   console.log("role", role);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch()
+  const {loading , error , success , token} = useSelector( (state) =>state.authReducer)
+  console.log('loading' ,loading);
+  console.log('error' ,error);
+  console.log('success' ,success);
+  console.log('token' ,token);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(`${role} login attempted: ${email}`);
+    const payload ={
+      email,
+      password
+    }
+
+    dispatch( logIn_Thunk(payload))
   };
 
   return (
