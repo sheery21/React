@@ -91,3 +91,37 @@ export const userOtp = createAsyncThunk(
     }
   },
 );
+
+export const Bank_OfficerOtp = createAsyncThunk(
+  "/api/auth/verify/bank_Officer-otp",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_OTP_VERIFY_BANK_OFFICER_API;
+      const res = await axios.post(url, payload);
+      return res.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
+    }
+  },
+);
+
+export const adminOtp = createAsyncThunk(
+  "/api/auth/verify/admin-otp",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_OTP_VERIFY_ADMIN_API;
+      const res = await axios.post(url, payload);
+      return res.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
+    }
+  },
+);

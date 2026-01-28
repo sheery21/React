@@ -687,6 +687,87 @@ export const verifyOTPController = async (req, res) => {
     });
   }
 };
+export const verifyOTP_WithBank_Officer_Controller = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({
+        message: "Required field are missing",
+        status: false,
+      });
+    }
+
+    const isExist = await BankOfficerModel.findOne({ email, otp, isUsed: false });
+
+    if (!isExist) {
+      return res.status(400).json({
+        message: "Invalid OTP",
+        status: false,
+      });
+    }
+    if (isExist.isUsed === true) {
+      return res.status(400).json({
+        message: "This OTP has expired. Please request a new OTP.",
+        status: false,
+      });
+    }
+    await OtpModel.findByIdAndUpdate(isExist._id, { isUsed: true });
+    await BankOfficerModel.findOneAndUpdate({ email }, { isVerified: true });
+    return res.status(201).json({
+      message: "otp verify",
+      status: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || "somthing went wrong",
+      status: false,
+    });
+  }
+};
+export const verifyOTP_WithAdmin_Controller = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({
+        message: "Required field are missing",
+        status: false,
+      });
+    }
+
+    const isExist = await AdminModel.findOne({ email, otp, isUsed: false });
+
+    console.log("email", email);
+    console.log("otp", otp);
+
+    console.log("isExist", isExist);
+
+    if (!isExist) {
+      return res.status(400).json({
+        message: "Invalid OTP",
+        status: false,
+      });
+    }
+    if (isExist.isUsed === true) {
+      return res.status(400).json({
+        message: "This OTP has expired. Please request a new OTP.",
+        status: false,
+      });
+    }
+    await OtpModel.findByIdAndUpdate(isExist._id, { isUsed: true });
+    await AdminModel.findOneAndUpdate({ email }, { isVerified: true });
+    return res.status(201).json({
+      message: "otp verify",
+      status: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || "somthing went wrong",
+      status: false,
+    });
+  }
+};
 
 export const resendOTPController = async (req, res) => {
   try {

@@ -9,12 +9,14 @@ const OtpVerification = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, success, error , user } = useSelector((state) => state.authReducer);
+  const { loading, otpVerified, error, user } = useSelector(
+    (state) => state.authReducer,
+  );
   const location = useLocation();
   const role = location.state?.role;
 
   useEffect(() => {
-    if (success) {
+    if (otpVerified) {
       Swal.fire("Success", "OTP Verified Successfully", "success");
 
       // role based redirect
@@ -25,13 +27,12 @@ const OtpVerification = () => {
     if (error) {
       Swal.fire("Error", error?.message || "Invalid OTP", "error");
     }
-  }, [success, error, navigate ,role]);
+  }, [otpVerified, error, navigate, role]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     console.log("OTP response user:", user);
-    
 
     if (!email) {
       Swal.fire("Error", "Email is required", "error");

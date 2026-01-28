@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
 import {
+  adminOtp,
+  Bank_OfficerOtp,
   logIn_Thunk,
   signUpWihtBank_Officer,
   signUpWith_Admin,
@@ -15,6 +17,7 @@ const authSlice = createSlice({
     error: null,
     user: null,
     success: false,
+    otpVerified: false,
     token: null,
   },
   reducers: {},
@@ -84,17 +87,47 @@ const authSlice = createSlice({
     builder.addCase(userOtp.pending, (state) => {
       state.loading = true;
       state.error = null;
-      state.success = false;
+      state.otpVerified = false;
     });
     builder.addCase(userOtp.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.user = payload;
-      state.success = true;
-    }); 
+      state.otpVerified = true;
+    });
     builder.addCase(userOtp.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload;
-      state.success = false;
+      state.otpVerified = false;
+    });
+    builder.addCase(Bank_OfficerOtp.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.otpVerified = false;
+    });
+    builder.addCase(Bank_OfficerOtp.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+      state.otpVerified = true;
+    });
+    builder.addCase(Bank_OfficerOtp.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      state.otpVerified = false;
+    });
+    builder.addCase(adminOtp.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.otpVerified = false;
+    });
+    builder.addCase(adminOtp.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+      state.otpVerified = true;
+    });
+    builder.addCase(adminOtp.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      state.otpVerified = false;
     });
   },
 });
