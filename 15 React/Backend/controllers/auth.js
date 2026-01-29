@@ -675,8 +675,10 @@ export const verifyOTPController = async (req, res) => {
       });
     }
     await OtpModel.findByIdAndUpdate(isExist._id, { isUsed: true });
-   const user =  await UserModel.findOneAndUpdate({ email }, { isVerified: true });
-   console.log("user" , user)
+    const user = await UserModel.findOneAndUpdate(
+      { email },
+      { isVerified: true },
+    );
     return res.status(201).json({
       message: "otp verify",
       status: true,
@@ -756,23 +758,22 @@ export const verifyOTP_WithAdmin_Controller = async (req, res) => {
     //     status: false,
     //   });
     // }
-      console.log("updating otp and user");
-      const update = await OtpModel.findByIdAndUpdate(isExist._id, {
-        isUsed: true,
-      })
+    console.log("updating otp and user");
+    const update = await OtpModel.findByIdAndUpdate(isExist._id, {
+      isUsed: true,
+    });
 
-      const updatedAdmin = await AdminModel.findOneAndUpdate(
-        { email },
-        { isVerified: true },)
+    const updatedAdmin = await AdminModel.findOneAndUpdate(
+      { email },
+      { isVerified: true },
+    );
 
-      console.log("UPDATED ADMIN 👉", updatedAdmin);
+    console.log("UPDATED ADMIN 👉", updatedAdmin);
 
-      return res.status(201).json({
-        message: "otp verify",
-        status: true,
-      });
-    
-    
+    return res.status(201).json({
+      message: "otp verify",
+      status: true,
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || "somthing went wrong",

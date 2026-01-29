@@ -18,6 +18,9 @@ import {
   BankOfficer_Otp,
   User_Otp,
 } from "./pages/authPages/otpVerifation/otpVariPage";
+import UserDashboard from "./pages/dashboard/userdashboard";
+import BankOfficerDashboard from "./pages/dashboard/BankOfficerDashboard";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
 
 function App() {
   return (
@@ -41,6 +44,10 @@ function App() {
 
         {/* ForgetPassword Pages */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/bank-officer-dashboard" element={<BankOfficerDashboard />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </>
   );
