@@ -35,10 +35,15 @@ const SignupForm = () => {
 
   const navigate = useNavigate();
 
-  const loginRoutes = {
+  const otpRoutes = {
     customer: "/user-otp",
     bank_officer: "/bankOfficer-otp",
     sbp_admin: "/admin-otp",
+  };
+  const loginRoutes = {
+    customer: "/user-login",
+    bank_officer: "/bank-officer-login",
+    sbp_admin: "/admin-login",
   };
 
   useEffect(() => {
@@ -90,7 +95,7 @@ const SignupForm = () => {
       });
 
       setTimeout(() => {
-        navigate(loginRoutes[formData.role], {
+        navigate(otpRoutes[formData.role], {
           state: {
             role: formData.role,
           },
