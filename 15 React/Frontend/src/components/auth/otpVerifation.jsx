@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { userOtp } from "../../store/features/auth/auth.thunk";
+import {
+  adminOtp,
+  Bank_OfficerOtp,
+  userOtp,
+} from "../../store/features/auth/auth.thunk";
 import Swal from "sweetalert2";
 
 const OtpVerification = () => {
@@ -48,7 +52,13 @@ const OtpVerification = () => {
       email,
       otp,
     };
-    dispatch(userOtp(payload));
+    if (role === "bank_officer") {
+      dispatch(Bank_OfficerOtp(payload));
+    } else if (role === "sbp_admin") {
+      dispatch(adminOtp(payload));
+    } else {
+      dispatch(userOtp(payload));
+    }
   };
 
   return (
