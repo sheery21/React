@@ -74,6 +74,38 @@ export const logIn_Thunk = createAsyncThunk(
     }
   },
 );
+export const logInWith_Bank_Officer_Thunk = createAsyncThunk(
+  "/api/auth//logIn/Bank_Officer",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_LOGIN_WITH_BANK_OFFICER_API;
+      const res = await axios.post(url, payload);
+      return res.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
+    }
+  },
+);
+export const logInWith_Admin_Thunk = createAsyncThunk(
+  "/api/auth//logIn/admin",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_LOGIN_WITH_ADMIN_API;
+      const res = await axios.post(url, payload);
+      return res.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, status: false });
+      }
+    }
+  },
+);
 
 export const userOtp = createAsyncThunk(
   "/api/auth/verify-otp",

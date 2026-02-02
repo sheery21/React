@@ -21,6 +21,7 @@ import {
 import UserDashboard from "./pages/dashboard/userdashboard";
 import BankOfficerDashboard from "./pages/dashboard/BankOfficerDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import PrivateRoute from "./routers/privateRoute";
 
 function App() {
   return (
@@ -45,9 +46,18 @@ function App() {
         {/* ForgetPassword Pages */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/bank-officer-dashboard" element={<BankOfficerDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route element={<PrivateRoute allowedRoles={["customer"]} />}>
+          <Route path="/user-dashboard" element={<UserDashboard />} />
+        </Route>
+        <Route element={<PrivateRoute allowedRoles={["bank_officer"]} />}>
+          <Route
+            path="/bank-officer-dashboard"
+            element={<BankOfficerDashboard />}
+          />
+        </Route>
+        <Route element={<PrivateRoute allowedRoles={["sbp_admin"]} />}>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </>
   );

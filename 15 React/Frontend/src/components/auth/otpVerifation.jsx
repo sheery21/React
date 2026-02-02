@@ -12,6 +12,8 @@ import Swal from "sweetalert2";
 const OtpVerification = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState("");
+  const [timer, setTimer] = useState(30);
+  const [canResend, setCanResend] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, otpVerified, error, user } = useSelector(
@@ -19,6 +21,24 @@ const OtpVerification = () => {
   );
   const location = useLocation();
   const role = location.state?.role;
+
+  useEffect( () => {
+    
+    setCanResend(false);
+    setTimer(30);
+    const interval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setCanResend(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (otpVerified) {
@@ -48,9 +68,6 @@ const OtpVerification = () => {
       Swal.fire("Error", "Please enter 4 digit OTP", "error");
       return;
     }
-
-    dispatch(resetOtp({email}));
-
     const payload = {
       email,
       otp,
@@ -65,21 +82,33 @@ const OtpVerification = () => {
   };
 
   const handleResendOtp = () => {
-  if (!email) {
-    Swal.fire("Error", "Email is required", "error");
-    return;
-  }
+    if (!email) {
+      Swal.fire("Error", "Email is required", "error");
+      return;
+    }
 
-  dispatch(resetOtp({ email }))
-    .unwrap()
-    .then(() => {
-      Swal.fire("Success", "OTP resent successfully", "success");
-    })
-    .catch((err) => {
-      Swal.fire("Error", err?.message || "Failed to resend OTP", "error");
-    });
-};
+    dispatch(resetOtp({ email }))
+      .unwrap()
+      .then(() => {
+        Swal.fire("Success", "OTP resent successfully", "success");
+        setCanResend(false);
+        setTimer(30);
 
+        const interval = setInterval(() => {
+          setTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              setCanResend(true);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      })
+      .catch((err) => {
+        Swal.fire("Error", err?.message || "Failed to resend OTP", "error");
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -123,9 +152,14 @@ const OtpVerification = () => {
           <button
             type="button"
             onClick={handleResendOtp}
-            className="text-sm text-primary hover:underline"
+            disabled={!canResend}
+            className={`text-sm ${
+              canResend
+                ? "text-primary hover:underline"
+                : "text-gray-400 cursor-not-allowed"
+            }`}
           >
-            Resend OTP
+            {canResend ? "Resend OTP" : `Resend OTP in ${timer}s`}
           </button>
         </div>
       </div>
