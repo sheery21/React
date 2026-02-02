@@ -138,7 +138,7 @@ const authSlice = createSlice({
     builder.addCase(resetOtp.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.user = payload;
-      state.otpVerified = true;
+      state.otpVerified = false;
     });
     builder.addCase(resetOtp.rejected, (state, { payload }) => {
       state.loading = false;

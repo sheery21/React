@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   adminOtp,
   Bank_OfficerOtp,
+  resetOtp,
   userOtp,
 } from "../../store/features/auth/auth.thunk";
 import Swal from "sweetalert2";
@@ -48,6 +49,8 @@ const OtpVerification = () => {
       return;
     }
 
+    dispatch(resetOtp({email}));
+
     const payload = {
       email,
       otp,
@@ -60,6 +63,23 @@ const OtpVerification = () => {
       dispatch(userOtp(payload));
     }
   };
+
+  const handleResendOtp = () => {
+  if (!email) {
+    Swal.fire("Error", "Email is required", "error");
+    return;
+  }
+
+  dispatch(resetOtp({ email }))
+    .unwrap()
+    .then(() => {
+      Swal.fire("Success", "OTP resent successfully", "success");
+    })
+    .catch((err) => {
+      Swal.fire("Error", err?.message || "Failed to resend OTP", "error");
+    });
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -100,7 +120,11 @@ const OtpVerification = () => {
         </form>
 
         <div className="text-center mt-4">
-          <button className="text-sm text-primary hover:underline">
+          <button
+            type="button"
+            onClick={handleResendOtp}
+            className="text-sm text-primary hover:underline"
+          >
             Resend OTP
           </button>
         </div>

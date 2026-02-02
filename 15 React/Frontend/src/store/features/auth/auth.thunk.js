@@ -132,7 +132,7 @@ export const resetOtp = createAsyncThunk(
     try {
       const url = import.meta.env.VITE_LOCAL_HOST_RESEND_OTP_API;
       const res = await axios.post(url, payload);
-      return res;
+      return res.data;
     } catch (error) {
       if (error.response && error.response.data) {
         return rejectWithValue(error.message);
