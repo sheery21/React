@@ -657,11 +657,6 @@ export const verifyOTPController = async (req, res) => {
 
     const isExist = await OtpModel.findOne({ email, otp, isUsed: false });
 
-    console.log("email", email);
-    console.log("otp", otp);
-
-    console.log("isExist", isExist);
-
     if (!isExist) {
       return res.status(400).json({
         message: "Invalid OTP",
@@ -741,24 +736,13 @@ export const verifyOTP_WithAdmin_Controller = async (req, res) => {
 
     const isExist = await OtpModel.findOne({ email, otp, isUsed: false });
 
-    console.log("email", email);
-    console.log("otp", otp);
-
-    console.log("isExist", isExist);
-
     if (!isExist) {
       return res.status(400).json({
         message: "Invalid or expired OTP",
         status: false,
       });
     }
-    // if (isExist.isUsed) {
-    //   return res.status(400).json({
-    //     message: "This OTP has expired. Please request a new OTP.",
-    //     status: false,
-    //   });
-    // }
-    console.log("updating otp and user");
+
     const update = await OtpModel.findByIdAndUpdate(isExist._id, {
       isUsed: true,
     });

@@ -125,3 +125,20 @@ export const adminOtp = createAsyncThunk(
     }
   },
 );
+
+export const resetOtp = createAsyncThunk(
+  "/api/auth/resend-otp",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_RESEND_OTP_API;
+      const res = await axios.post(url, payload);
+      return res;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue({ message: error.message });
+      }
+    }
+  },
+);

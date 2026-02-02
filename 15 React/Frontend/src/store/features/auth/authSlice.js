@@ -4,6 +4,7 @@ import {
   adminOtp,
   Bank_OfficerOtp,
   logIn_Thunk,
+  resetOtp,
   signUpWihtBank_Officer,
   signUpWith_Admin,
   sigUpThunk,
@@ -125,6 +126,21 @@ const authSlice = createSlice({
       state.otpVerified = true;
     });
     builder.addCase(adminOtp.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      state.otpVerified = false;
+    });
+    builder.addCase(resetOtp.pending, (state) => {
+      state.loading = false;
+      state.error = null;
+      state.otpVerified = false;
+    });
+    builder.addCase(resetOtp.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.user = payload;
+      state.otpVerified = true;
+    });
+    builder.addCase(resetOtp.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload;
       state.otpVerified = false;
