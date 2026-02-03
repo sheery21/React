@@ -2,7 +2,6 @@ import AdminNavbar from "../../components/adminDashboard/AdminNavbar";
 import AdminSidebar from "../../components/adminDashboard/AdminSidebar";
 import AdminStatCard from "../../components/adminDashboard/AdminStatCard";
 
-
 const AdminDashboard = () => {
   return (
     <div className="flex bg-gray-100 min-h-screen">

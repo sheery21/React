@@ -402,6 +402,8 @@ export const logInWithAdminController = async (req, res) => {
         status: false,
       });
     }
+    console.log('role' ,role);
+
     const comparePass = await bcrypt.compare(password, user.password);
     if (!comparePass) {
       return res.status(401).json({
@@ -609,6 +611,8 @@ export const logInWithBank_OfficerController = async (req, res) => {
       });
     }
     const { role } = user;
+    console.log('role' ,role);
+    
 
     if (!user.isVerified) {
       return res.status(403).json({
