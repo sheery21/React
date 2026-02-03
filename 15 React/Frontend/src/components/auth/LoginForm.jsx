@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logIn_Thunk } from "../../store/features/auth/auth.thunk";
+import {
+  logIn_Thunk,
+  logInWith_Admin_Thunk,
+  logInWith_Bank_Officer_Thunk,
+} from "../../store/features/auth/auth.thunk";
+import Swal from "sweetalert2";
 
 const LoginForm = ({ role }) => {
   console.log("role", role);
@@ -16,30 +21,72 @@ const LoginForm = ({ role }) => {
   );
 
   useEffect(() => {
+    if (loading) {
+      Swal.fire({
+        title: "Logging in...",
+        text: "Please wait",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+    } else {
+      Swal.close();
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error,
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (success && token && user) {
-      if (user.role === "customer") {
-        navigate("/user-dashboard");
-      } else if (user.role === "bank_officer") {
-        navigate("/bank-dashboard");
-      } else if (user.role === "sbp_admin") {
-        navigate("/admin-dashboard");
-      }
+      Swal.fire({
+        icon: "success",
+        title: "Login Successful",
+        timer: 1500,
+        showConfirmButton: false,
+      }).then(() => {
+        if (user.role === "customer") {
+          navigate("/user-dashboard");
+        } else if (user.role === "bank_officer") {
+          navigate("/bank-dashboard");
+        } else if (user.role === "sbp_admin") {
+          navigate("/admin-dashboard");
+        }
+      });
     }
   }, [success, token, user]);
-  console.log("loading", loading);
-  console.log("error", error);
-  console.log("success", success);
-  console.log("token", token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`${role} login attempted: ${email}`);
+    if (!email || !password) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Fields",
+        text: "Please enter email and password",
+      });
+      return;
+    }
+
     const payload = {
       email,
       password,
     };
 
-    dispatch(logIn_Thunk(payload));
+    if (role === "Admin") {
+      dispatch(logInWith_Admin_Thunk(payload));
+    } else if (role === "Bank Officer") {
+      dispatch(logInWith_Bank_Officer_Thunk(payload));
+    } else {
+      dispatch(logIn_Thunk(payload));
+    }
   };
 
   return (
