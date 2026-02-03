@@ -170,6 +170,10 @@ export const logInController = async (req, res) => {
         status: false,
       });
     }
+
+    const { role } = user;
+
+    console.log("role", role);
     if (!user.isVerified) {
       return res.status(403).json({
         message:
@@ -196,6 +200,7 @@ export const logInController = async (req, res) => {
       email,
       mobileNUmber: user.mobileNUmber,
       token,
+      role,
     };
 
     return res.status(200).json({
@@ -389,6 +394,7 @@ export const logInWithAdminController = async (req, res) => {
         status: false,
       });
     }
+    const { role } = user;
     if (!user.isVerified) {
       return res.status(403).json({
         message:
@@ -415,6 +421,7 @@ export const logInWithAdminController = async (req, res) => {
       email,
       mobileNUmber: user.mobileNUmber,
       token,
+      role,
     };
 
     return res.status(200).json({
@@ -601,6 +608,8 @@ export const logInWithBank_OfficerController = async (req, res) => {
         status: false,
       });
     }
+    const { role } = user;
+
     if (!user.isVerified) {
       return res.status(403).json({
         message:
@@ -627,6 +636,7 @@ export const logInWithBank_OfficerController = async (req, res) => {
       email,
       mobileNUmber: user.mobileNUmber,
       token,
+      role,
     };
 
     return res.status(200).json({

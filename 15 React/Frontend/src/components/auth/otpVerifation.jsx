@@ -22,10 +22,7 @@ const OtpVerification = () => {
   const location = useLocation();
   const role = location.state?.role;
 
-  useEffect( () => {
-    
-    setCanResend(false);
-    setTimer(30);
+  useEffect(() => {
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {

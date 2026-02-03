@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector, } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { logIn_Thunk } from "../../store/features/auth/auth.thunk";
 
 const LoginForm = ({ role }) => {
@@ -8,23 +8,38 @@ const LoginForm = ({ role }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch()
-  const {loading , error , success , token} = useSelector( (state) =>state.authReducer)
-  console.log('loading' ,loading);
-  console.log('error' ,error);
-  console.log('success' ,success);
-  console.log('token' ,token);
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { success, token, user, loading, error } = useSelector(
+    (state) => state.authReducer,
+  );
+
+  useEffect(() => {
+    if (success && token && user) {
+      if (user.role === "customer") {
+        navigate("/user-dashboard");
+      } else if (user.role === "bank_officer") {
+        navigate("/bank-dashboard");
+      } else if (user.role === "sbp_admin") {
+        navigate("/admin-dashboard");
+      }
+    }
+  }, [success, token, user]);
+  console.log("loading", loading);
+  console.log("error", error);
+  console.log("success", success);
+  console.log("token", token);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     alert(`${role} login attempted: ${email}`);
-    const payload ={
+    const payload = {
       email,
-      password
-    }
+      password,
+    };
 
-    dispatch( logIn_Thunk(payload))
+    dispatch(logIn_Thunk(payload));
   };
 
   return (
