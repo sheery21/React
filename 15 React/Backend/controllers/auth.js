@@ -423,7 +423,6 @@ export const logInWithAdminController = async (req, res) => {
       email,
       mobileNUmber: user.mobileNUmber,
       token,
-      role,
     };
 
     return res.status(200).json({
@@ -431,6 +430,7 @@ export const logInWithAdminController = async (req, res) => {
       status: true,
       data: data,
       token,
+      role
     });
   } catch (error) {
     return res.status(500).json({
@@ -648,6 +648,7 @@ export const logInWithBank_OfficerController = async (req, res) => {
       status: true,
       data: data,
       token,
+      role
     });
   } catch (error) {
     return res.status(500).json({

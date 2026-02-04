@@ -12,7 +12,7 @@ const Sidebar = () => {
           My Profile
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Transactions
+          Complaint
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
           Settings

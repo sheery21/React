@@ -20,6 +20,8 @@ const LoginForm = ({ role }) => {
     (state) => state.authReducer,
   );
 
+  console.log("user role", user);
+
   useEffect(() => {
     if (loading) {
       Swal.fire({
@@ -40,7 +42,7 @@ const LoginForm = ({ role }) => {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: error,
+        text: error.message || "Soemthing went wrong",
       });
     }
   }, [error]);
