@@ -9,13 +9,10 @@ const Sidebar = () => {
           Dashboard
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          My Profile
+          Create Complaint
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Complaint
-        </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Settings
+          My Complaints
         </li>
       </ul>
     </div>
