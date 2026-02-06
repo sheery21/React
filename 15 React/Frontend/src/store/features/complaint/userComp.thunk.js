@@ -5,7 +5,7 @@ export const userThunk = createAsyncThunk(
   "/api/complaint/generate",
   async (payload, { rejectWithValue }) => {
     try {
-      const url = import.meta.env;
+      const url = import.meta.env.VITE_LOCAL_HOST_COMPLIAINT_WITH_USER_API;
       const res = await axios.post(url, payload);
 
       return res.data;
