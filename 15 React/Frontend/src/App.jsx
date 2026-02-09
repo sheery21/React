@@ -22,6 +22,7 @@ import UserDashboard from "./pages/dashboard/userdashboard";
 import BankOfficerDashboard from "./pages/dashboard/BankOfficerDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import PrivateRoute from "./routers/privateRoute";
+import CerateComplaint from "./components/complaints/createComplaint";
 
 function App() {
   return (
@@ -53,6 +54,8 @@ function App() {
         <Route element={<PrivateRoute allowedRoles={["bank_officer"]} />}>
           <Route path="/bank-dashboard" element={<BankOfficerDashboard />} />
         </Route>
+
+        <Route element={ <CerateComplaint />}  />
 
         <Route element={<PrivateRoute allowedRoles={["sbp_admin"]} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />

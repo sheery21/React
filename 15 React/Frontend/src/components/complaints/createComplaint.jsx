@@ -1,9 +1,9 @@
 import React from 'react'
 
-const CeratComplaint = () => {
+const CerateComplaint = () => {
   return (
     <div>CeratComplaint</div>
   )
 }
 
-export default CeratComplaint
+export default CerateComplaint
