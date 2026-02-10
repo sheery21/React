@@ -6,7 +6,12 @@ export const userThunk = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const url = import.meta.env.VITE_LOCAL_HOST_COMPLIAINT_WITH_USER_API;
-      const res = await axios.post(url, payload);
+      const token = localStorage.getItem("token");
+      const res = await axios.post(url, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       return res.data;
     } catch (error) {
