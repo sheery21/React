@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { build } from "vite";
 import { userThunk } from "./userComp.thunk";
 
 const complaintSlice = createSlice({
@@ -12,37 +11,35 @@ const complaintSlice = createSlice({
     success: false,
   },
   reducers: {
-    resatComplaintState : (state){
-        state.loading = false
-        state.error = null
-        state.complaintId = null
-        state.message = null
-        state.success = false
-    }
+    resatComplaintState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.complaintId = null;
+      state.message = null;
+      state.success = false;
+    },
   },
   extraReducers: (builder) => {
     builder
-    .addCase( userThunk.pending ,(state) => {
-        state.loading = true
-        state.error = null
-        state.success = false
-    })
-    .addCase( userThunk.pending ,(state , payload) => {
-        state.loading = false
-        state.success = payload.payload.state
-        state.complaintId = payload.payload.complaintId
-        state.message = payload.payload.message
-    })
-    .addCase( userThunk.pending ,(state , payload) => {
-        state.loading = false
-        state.error = payload.payload?.message || "something went worng"
-        state.success = false
-    })
+      .addCase(userThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(userThunk.pending, (state, payload) => {
+        state.loading = false;
+        state.success = payload.payload.state;
+        state.complaintId = payload.payload.complaintId;
+        state.message = payload.payload.message;
+      })
+      .addCase(userThunk.pending, (state, payload) => {
+        state.loading = false;
+        state.error = payload.payload?.message || "something went worng";
+        state.success = false;
+      });
   },
 });
 
-const { reducer, actions } = complaintSlice;
+export const { resetComplaintState } = complaintSlice.actions;
 
-const complaintReducer = reducer;
-
-export default complaintReducer;
+export default complaintSlice.reducer;
