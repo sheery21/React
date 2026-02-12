@@ -26,13 +26,13 @@ const complaintSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase(userThunk.pending, (state, payload) => {
+      .addCase(userThunk.fulfilled, (state, payload) => {
         state.loading = false;
         state.success = payload.payload.state;
         state.complaintId = payload.payload.complaintId;
         state.message = payload.payload.message;
       })
-      .addCase(userThunk.pending, (state, payload) => {
+      .addCase(userThunk.rejected, (state, payload) => {
         state.loading = false;
         state.error = payload.payload?.message || "something went worng";
         state.success = false;
@@ -40,6 +40,12 @@ const complaintSlice = createSlice({
   },
 });
 
-export const { resetComplaintState } = complaintSlice.actions;
+// export const { resetComplaintState } = complaintSlice.actions;
 
-export default complaintSlice.reducer;
+// export default complaintSlice.reducer;
+
+const { reducer, actions } = complaintSlice;
+
+const {} = actions;
+  
+export const complaintReducer = reducer;
