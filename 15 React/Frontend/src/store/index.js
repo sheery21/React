@@ -4,7 +4,7 @@ import { complaintReducer } from "./features/complaint/userComp.slice";
 const store = configureStore({
   reducer: {
     authReducer,
-    " complaint": complaintReducer,
+    "complaint": complaintReducer,
   },
 });
 
