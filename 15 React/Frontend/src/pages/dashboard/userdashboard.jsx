@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import Navbar from "../../components/userdashboard/navbar";
 import Sidebar from "../../components/userdashboard/sidebar";
 import StatCard from "../../components/userdashboard/statcard";
@@ -15,6 +16,8 @@ const UserDashboard = () => {
           <StatCard title="Transactions" value="34" />
           <StatCard title="Account Status" value="Active" />
         </div>
+
+        <Outlet />
       </div>
     </div>
   );

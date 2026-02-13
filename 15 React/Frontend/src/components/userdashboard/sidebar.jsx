@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 // src/components/dashboard/Sidebar.jsx
 const Sidebar = () => {
   return (
@@ -9,7 +11,9 @@ const Sidebar = () => {
           Dashboard
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
+          <Link to={"create-complaint"}>
           Create Complaint
+          </Link>
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
           My Complaints
