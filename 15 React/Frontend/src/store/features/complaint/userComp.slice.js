@@ -47,5 +47,5 @@ const complaintSlice = createSlice({
 const { reducer, actions } = complaintSlice;
 
 const {} = actions;
-  
+
 export const complaintReducer = reducer;

@@ -22,12 +22,12 @@ const CreateComplaint = () => {
   };
 
   const handleSubmit = (e) => {
-     if (!token) {
-    alert("Unauthorized. Please login again.");
-    return;
-  }
+    if (!token) {
+      alert("Unauthorized. Please login again.");
+      return;
+    }
     e.preventDefault();
-    dispatch(userThunk({formData , token}));
+    dispatch(userThunk(formData));
   };
 
   useEffect(() => {
