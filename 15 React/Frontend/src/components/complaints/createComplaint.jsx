@@ -8,6 +8,7 @@ const CreateComplaint = () => {
   const { loading, success, error, message } = useSelector(
     (state) => state.complaint,
   );
+  const { token } = useSelector((state) => state.authReducer);
 
   const [formData, setFormData] = useState({
     complaintType: "Complaint",
@@ -21,8 +22,12 @@ const CreateComplaint = () => {
   };
 
   const handleSubmit = (e) => {
+     if (!token) {
+    alert("Unauthorized. Please login again.");
+    return;
+  }
     e.preventDefault();
-    dispatch(userThunk(formData));
+    dispatch(userThunk({formData , token}));
   };
 
   useEffect(() => {

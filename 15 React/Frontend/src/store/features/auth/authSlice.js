@@ -13,15 +13,18 @@ import {
   userOtp,
 } from "./auth.thunk";
 
+const stroedToken = localStorage.getItem("token");
+const stroedUser = localStorage.getItem("user");
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     loading: false,
     error: null,
-    user: null,
+    user: stroedUser ? JSON.parse(stroedUser) : null,
     success: false,
     otpVerified: false,
-    token: null,
+    token: stroedToken || null,
   },
   reducers: {},
   extraReducers: (builder) => {
