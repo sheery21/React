@@ -48,8 +48,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route element={<PrivateRoute allowedRoles={["customer"]} />}>
-          <Route path="/user-dashboard">
-            <Route index element={<UserDashboard />} />
+          <Route path="/user-dashboard" element={<UserDashboard />}>
+            <Route index element={<div />} />
             <Route path="create-complaint" element={<CerateComplaint />} />
           </Route>
         </Route>

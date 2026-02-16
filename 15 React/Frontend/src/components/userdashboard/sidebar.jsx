@@ -11,7 +11,7 @@ const Sidebar = () => {
           Dashboard
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          <Link to="create-complaint">
+          <Link to="/user-dashboard/create-complaint">
           Create Complaint
           </Link>
         </li>
