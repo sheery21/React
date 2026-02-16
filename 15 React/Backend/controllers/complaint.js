@@ -13,10 +13,6 @@ export const complaintController = async (req, res) => {
         data: null,
       });
     }
-    console.log("complaintType" ,complaintType);
-    console.log("category" ,category);
-    console.log("description" ,description);
-    console.log("priority" ,priority);
 
     if (!complaintType || !category || !description || !priority) {
       return res.status(400).json({

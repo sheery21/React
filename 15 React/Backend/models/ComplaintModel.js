@@ -45,7 +45,7 @@ const complaintSchema = new mongoose.Schema(
       ref: "bank",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const ComplaintModel = mongoose.model("complaint", complaintSchema);
