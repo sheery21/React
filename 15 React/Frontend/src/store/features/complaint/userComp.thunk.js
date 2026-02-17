@@ -23,3 +23,11 @@ export const userThunk = createAsyncThunk(
     }
   },
 );
+
+export const getAllComplaint = createAsyncThunk(
+  "/api/compalit/getAllComplaint",
+  async (payload, { rejectWithValue }) => {
+      const url = import.meta.env.VITE_LOCAL_HOST_COMPLIAINT_WITH_USER_API;
+
+  },
+);

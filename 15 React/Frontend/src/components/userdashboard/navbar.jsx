@@ -6,6 +6,11 @@ import { Navigate, useNavigate } from "react-router-dom";
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userString = localStorage.getItem("user");
+  const user = userString ? JSON.parse(userString) : null;
+  console.log("user", user);
+  console.log("user", user.name);
+
   const handleLogout = () => {
     dispatch(LogOut());
     localStorage.removeItem("token");
@@ -14,7 +19,7 @@ const Navbar = () => {
   };
   return (
     <div className="flex justify-between items-center bg-white shadow px-6 py-4">
-      <h1 className="text-xl font-semibold text-primary">User Dashboard</h1>
+      <h1 className="text-xl font-semibold text-primary">{user.name}</h1>
 
       <button
         onClick={handleLogout}

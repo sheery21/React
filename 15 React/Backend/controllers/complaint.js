@@ -13,6 +13,7 @@ export const complaintController = async (req, res) => {
         data: null,
       });
     }
+    console.log("user", user);
 
     if (!complaintType || !category || !description || !priority) {
       return res.status(400).json({
@@ -21,8 +22,6 @@ export const complaintController = async (req, res) => {
         data: null,
       });
     }
-
-    
 
     const complaint = await ComplaintModel.create({
       ...req.body,

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userThunk } from "../../store/features/complaint/userComp.thunk";
+import axios from "axios";
 
 const CreateComplaint = () => {
   const dispatch = useDispatch();
+  const [file, setFile] = useState(null);
 
   const { loading, success, error, message } = useSelector(
     (state) => state.complaint,
@@ -21,13 +23,64 @@ const CreateComplaint = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!token) {
       alert("Unauthorized. Please login again.");
       return;
     }
-    e.preventDefault();
-    dispatch(userThunk(formData));
+
+    try {
+      // 1️⃣ Create Complaint
+      const complaintRes = await dispatch(userThunk(formData)).unwrap();
+      console.log("complaintRes:", complaintRes);
+
+      // 2️⃣ Get Complaint ID safely
+      const complaintId = complaintRes?.complaintId|| complaintRes?.data?.complaintId;
+      if (!complaintId) {
+        throw new Error("Complaint ID not received from API");
+      }
+      console.log("complaintId:", complaintId);
+
+      // 3️⃣ File Upload
+      const URL = import.meta.env.VITE_LOCAL_HOST_USER_FILE_SEND_API;
+      console.log("Upload URL:", URL);
+
+      if (file && file.length > 0) {
+        const formDataFile = new FormData();
+        for (let i = 0; i < file.length; i++) {
+          formDataFile.append("files", file[i]);
+        }
+
+        const uploadRes = await axios.post(
+          `${URL}/${complaintId}`,
+          formDataFile,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        console.log("File Upload Response:", uploadRes.data);
+      }
+
+      alert("Complaint & Evidence Uploaded Successfully");
+
+      // 4️⃣ Reset Form
+      setFormData({
+        complaintType: "Complaint",
+        category: "ATM",
+        description: "",
+        priority: "low",
+      });
+      setFile(null);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Something went wrong");
+    }
   };
 
   useEffect(() => {
@@ -45,7 +98,6 @@ const CreateComplaint = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white w-full max-w-2xl p-8 rounded-xl shadow-lg">
-        {/* Heading */}
         <h2 className="text-3xl font-bold text-primary mb-6 text-center">
           Create Complaint
         </h2>
@@ -119,6 +171,19 @@ const CreateComplaint = () => {
             />
           </div>
 
+          {/* Evidence Upload */}
+          <div>
+            <label className="block mb-2 font-medium text-gray-700">
+              Upload Evidence
+            </label>
+            <input
+              type="file"
+              multiple
+              onChange={(e) => setFile(e.target.files)}
+              className="w-full border border-gray-300 p-3 rounded-lg"
+            />
+          </div>
+
           {/* Submit Button */}
           <button
             type="submit"
@@ -127,12 +192,11 @@ const CreateComplaint = () => {
           >
             {loading ? "Submitting..." : "Submit Complaint"}
           </button>
-        </form>
 
-        {/* Error Message */}
-        {error && (
-          <p className="text-red-500 text-center mt-4 font-medium">{error}</p>
-        )}
+          {error && (
+            <p className="text-red-500 text-center mt-4 font-medium">{error}</p>
+          )}
+        </form>
       </div>
     </div>
   );
