@@ -24,10 +24,26 @@ export const userThunk = createAsyncThunk(
   },
 );
 
-export const getAllComplaint = createAsyncThunk(
-  "/api/compalit/getAllComplaint",
+export const getAllComplaintThunk = createAsyncThunk(
+  "/api/complaint/getAllComplaint",
   async (payload, { rejectWithValue }) => {
-      const url = import.meta.env.VITE_LOCAL_HOST_COMPLIAINT_WITH_USER_API;
-
+    try {
+      const url = import.meta.env.VITE_LOCAL_HOST_GET_ALL_COMPLAINT_API;
+      const token = localStorage.getItem("token");
+      console.log("token" , token);
+      
+      const res = await axios.get(url, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue({ message: error.message, state: false });
+      }
+    }
   },
 );

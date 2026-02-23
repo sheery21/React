@@ -15,6 +15,8 @@ export const customerAuth = async (req, res, next) => {
 
     const user = await UserModel.findById(isVerified.id).select("role bankId");
 
+    console.log("user", user);
+
     if (!user) {
       return res.status(401).json({
         message: "UnAuth user",

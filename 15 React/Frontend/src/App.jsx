@@ -23,6 +23,7 @@ import BankOfficerDashboard from "./pages/dashboard/BankOfficerDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import PrivateRoute from "./routers/privateRoute";
 import CerateComplaint from "./components/complaints/createComplaint";
+import AllComplaint from "./components/complaints/allComplaint";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           <Route path="/user-dashboard" element={<UserDashboard />}>
             <Route index element={<div />} />
             <Route path="create-complaint" element={<CerateComplaint />} />
+            <Route path="getAll-complaint" element={<AllComplaint />} />
           </Route>
         </Route>
 

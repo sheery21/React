@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // src/components/dashboard/Sidebar.jsx
 const Sidebar = () => {
+  const location = useLocation();
   return (
     <div className="w-64 bg-primary text-white min-h-screen p-6">
       <h2 className="text-2xl font-bold mb-8">User Panel</h2>
@@ -10,13 +11,23 @@ const Sidebar = () => {
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
           Dashboard
         </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          <Link to="/user-dashboard/create-complaint">
-          Create Complaint
-          </Link>
+        <li
+          className={`p-2 rounded cursor-pointer ${
+            location.pathname.includes("create-complaint")
+              ? "bg-secondary"
+              : "hover:bg-secondary"
+          }`}
+        >
+          <Link to="/user-dashboard/create-complaint">Create Complaint</Link>
         </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          My Complaints
+        <li
+          className={`p-2 rounded cursor-pointer ${
+            location.pathname.includes("getAll-complaint")
+              ? "bg-secondary"
+              : "hover:bg-secondary"
+          }`}
+        >
+          <Link to="/user-dashboard/getAll-complaint">My Complaints</Link>
         </li>
       </ul>
     </div>

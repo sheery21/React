@@ -5,7 +5,9 @@ import StatCard from "../../components/userdashboard/statcard";
 
 const UserDashboard = () => {
   const location = useLocation();
-  const hideCards = location.pathname.includes("create-complaint");
+  const hideCards =
+    location.pathname.includes("create-complaint") ||
+    location.pathname.includes("getAll-complaint");
   return (
     <div className="flex bg-gray-100 min-h-screen">
       <Sidebar />
