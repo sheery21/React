@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllComplaintThunk } from "../../store/features/complaint/userComp.thunk";
 
@@ -12,6 +12,17 @@ const AllComplaint = () => {
   useEffect(() => {
     dispatch(getAllComplaintThunk());
   }, [dispatch]);
+
+  const sortedComplaints = useMemo(() => {
+    const priorityOrder = {
+      high: 1,
+      medium: 2,
+      low: 3,
+    };
+    return [...(complaints || [])].sort((a, b) => {
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+  }, [complaints]);
 
   return (
     <div className="p-6">
@@ -32,7 +43,7 @@ const AllComplaint = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {complaints?.map((comp) => (
+        {sortedComplaints.map((comp) => (
           <div
             key={comp._id}
             className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition space-y-3"
