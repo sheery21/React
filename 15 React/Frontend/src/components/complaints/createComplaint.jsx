@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userThunk } from "../../store/features/complaint/userComp.thunk";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const CreateComplaint = () => {
   const dispatch = useDispatch();
@@ -27,25 +28,36 @@ const CreateComplaint = () => {
     e.preventDefault();
 
     if (!token) {
-      alert("Unauthorized. Please login again.");
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "Please login again.",
+      });
       return;
     }
 
     try {
+      Swal.fire({
+        title: "Submitting...",
+        text: "Please wait while we submit your complaint.",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       // 1️⃣ Create Complaint
       const complaintRes = await dispatch(userThunk(formData)).unwrap();
-      console.log("complaintRes:", complaintRes);
 
-      // 2️⃣ Get Complaint ID safely
-      const complaintId = complaintRes?.complaintId|| complaintRes?.data?.complaintId;
+      const complaintId =
+        complaintRes?.complaintId || complaintRes?.data?.complaintId;
+
       if (!complaintId) {
         throw new Error("Complaint ID not received from API");
       }
-      console.log("complaintId:", complaintId);
 
-      // 3️⃣ File Upload
+      // 2️⃣ Upload Files (if any)
       const URL = import.meta.env.VITE_LOCAL_HOST_USER_FILE_SEND_API;
-      console.log("Upload URL:", URL);
 
       if (file && file.length > 0) {
         const formDataFile = new FormData();
@@ -53,33 +65,37 @@ const CreateComplaint = () => {
           formDataFile.append("files", file[i]);
         }
 
-        const uploadRes = await axios.post(
-          `${URL}/${complaintId}`,
-          formDataFile,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
+        await axios.post(`${URL}/${complaintId}`, formDataFile, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-        );
-
-        console.log("File Upload Response:", uploadRes.data);
+        });
       }
 
-      alert("Complaint & Evidence Uploaded Successfully");
+      Swal.fire({
+        icon: "success",
+        title: "Success 🎉",
+        text: "Complaint & Evidence Uploaded Successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
-      // 4️⃣ Reset Form
+      // Reset Form
       setFormData({
         complaintType: "Complaint",
         category: "ATM",
         description: "",
         priority: "low",
       });
+
       setFile(null);
     } catch (err) {
-      console.error(err);
-      alert(err.message || "Something went wrong");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err.message || "Something went wrong!",
+      });
     }
   };
 
