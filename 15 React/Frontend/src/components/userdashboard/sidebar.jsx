@@ -8,8 +8,14 @@ const Sidebar = () => {
       <h2 className="text-2xl font-bold mb-8">User Panel</h2>
 
       <ul className="space-y-4">
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Dashboard
+        <li
+          className={`p-2 rounded cursor-pointer ${
+            location.pathname === "/user-dashboard"
+              ? "bg-secondary"
+              : "hover:bg-secondary"
+          }`}
+        >
+        <Link to="/user-dashboard">Dashboard</Link>
         </li>
         <li
           className={`p-2 rounded cursor-pointer ${

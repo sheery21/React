@@ -24,7 +24,7 @@ import AdminDashboard from "./pages/dashboard/AdminDashboard";
 import PrivateRoute from "./routers/privateRoute";
 import CerateComplaint from "./components/complaints/createComplaint";
 import AllComplaint from "./components/complaints/allComplaint";
-
+import UserDashbosrdHome from "./components/userdashboard/userDashbosrdHome";
 function App() {
   return (
     <>
@@ -50,7 +50,7 @@ function App() {
 
         <Route element={<PrivateRoute allowedRoles={["customer"]} />}>
           <Route path="/user-dashboard" element={<UserDashboard />}>
-            <Route index element={<div />} />
+            <Route index element={<UserDashbosrdHome />} />
             <Route path="create-complaint" element={<CerateComplaint />} />
             <Route path="getAll-complaint" element={<AllComplaint />} />
           </Route>
