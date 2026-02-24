@@ -402,7 +402,6 @@ export const logInWithAdminController = async (req, res) => {
         status: false,
       });
     }
-    console.log('role' ,role);
 
     const comparePass = await bcrypt.compare(password, user.password);
     if (!comparePass) {
@@ -430,7 +429,7 @@ export const logInWithAdminController = async (req, res) => {
       status: true,
       data: data,
       token,
-      role
+      role,
     });
   } catch (error) {
     return res.status(500).json({
@@ -611,8 +610,6 @@ export const logInWithBank_OfficerController = async (req, res) => {
       });
     }
     const { role } = user;
-    console.log('role' ,role);
-    
 
     if (!user.isVerified) {
       return res.status(403).json({
@@ -648,7 +645,7 @@ export const logInWithBank_OfficerController = async (req, res) => {
       status: true,
       data: data,
       token,
-      role
+      role,
     });
   } catch (error) {
     return res.status(500).json({
@@ -766,8 +763,6 @@ export const verifyOTP_WithAdmin_Controller = async (req, res) => {
       { email },
       { isVerified: true },
     );
-
-    console.log("UPDATED ADMIN 👉", updatedAdmin);
 
     return res.status(201).json({
       message: "otp verify",

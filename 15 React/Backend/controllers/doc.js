@@ -6,12 +6,9 @@ export const docControlers = async (req, res) => {
   try {
     const user = req.user;
     const { complaintId } = req.params;
-    console.log("user", user);
-    console.log("complaintId", complaintId);
 
     const docCollection = req.files;
 
-    console.log("req files", docCollection);
     if (!user) {
       return res.status(400).json({
         message: "un auth user",
@@ -34,12 +31,11 @@ export const docControlers = async (req, res) => {
         public_id: result.public_id,
       });
     }
-    console.log("uploadedEvidence", uploadedEvidence);
 
     const complaint = await ComplaintModel.findByIdAndUpdate(
       complaintId,
       { $push: { uploadedEvidence: { $each: uploadedEvidence } } },
-      { new: true }
+      { new: true },
     );
     if (!complaint) {
       return res.status(404).json({

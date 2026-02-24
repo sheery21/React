@@ -1,5 +1,5 @@
-import { LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
+import { logOut } from "../../store/features/auth/authSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 
 // src/components/dashboard/Navbar.jsx
@@ -12,7 +12,7 @@ const Navbar = () => {
   console.log("user", user.name);
 
   const handleLogout = () => {
-    dispatch(LogOut());
+    dispatch(logOut());
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/");

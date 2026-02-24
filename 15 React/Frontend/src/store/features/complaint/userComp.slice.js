@@ -47,7 +47,7 @@ const complaintSlice = createSlice({
         state.loading = false;
         state.success = payload.payload.state;
         state.complaintId = payload.payload.complaintId;
-        state.complaints = payload.payload.complaints;
+        state.complaints = payload.payload.data;
         state.message = payload.payload.message;
       })
       .addCase(getAllComplaintThunk.rejected, (state, payload) => {

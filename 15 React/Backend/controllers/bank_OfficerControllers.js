@@ -3,7 +3,6 @@ import ComplaintModel from "../models/ComplaintModel.js";
 export const bank_OfficerControllers = async (req, res) => {
   try {
     const user = req.user;
-    console.log("user ", user);
 
     if (!user) {
       return res.status(400).json({
@@ -32,9 +31,6 @@ export const bank_Officer_updateControllers = async (req, res) => {
     const { Cid } = req.params;
 
     const { status } = req.body;
-
-    console.log("req Cid", Cid);
-    console.log("status", status);
 
     const data = await ComplaintModel.findByIdAndUpdate(
       Cid ,

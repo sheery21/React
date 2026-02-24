@@ -30,9 +30,9 @@ export const getAllComplaintThunk = createAsyncThunk(
     try {
       const url = import.meta.env.VITE_LOCAL_HOST_GET_ALL_COMPLAINT_API;
       const token = localStorage.getItem("token");
-      console.log("token" , token);
-      
-      const res = await axios.get(url, payload, {
+      console.log("token", token);
+
+      const res = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

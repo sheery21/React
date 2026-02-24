@@ -35,29 +35,66 @@ const AllComplaint = () => {
         {complaints?.map((comp) => (
           <div
             key={comp._id}
-            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
+            className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition space-y-3"
           >
-            <h3 className="text-lg font-semibold text-primary mb-2">
-              {comp.title}
+            {/* Complaint Type */}
+            <h3 className="text-lg font-bold text-primary">
+              {comp.complaintType} - {comp.category}
             </h3>
 
-            <p className="text-gray-600 text-sm mb-3">{comp.description}</p>
+            {/* Bank Name */}
+            <p className="text-sm text-gray-500">
+              🏦 Bank:{" "}
+              <span className="font-medium">{comp.bankId?.bankName}</span>
+            </p>
 
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">ID: {comp._id}</span>
+            {/* Description */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 mb-1">
+                Description:
+              </p>
+              <p className="text-gray-600 text-sm">{comp.description}</p>
+            </div>
 
+            {/* Priority */}
+            <div className="flex justify-between items-center mt-2">
               <span
                 className={`px-3 py-1 text-xs rounded-full ${
-                  comp.status === "Pending"
+                  comp.priority === "high"
+                    ? "bg-red-100 text-red-600"
+                    : comp.priority === "medium"
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {comp.priority.toUpperCase()} Priority
+              </span>
+
+              {/* Status */}
+              <span
+                className={`px-3 py-1 text-xs rounded-full ${
+                  comp.status === "pending"
                     ? "bg-yellow-100 text-yellow-600"
-                    : comp.status === "Resolved"
+                    : comp.status === "resolved"
                       ? "bg-green-100 text-green-600"
                       : "bg-gray-100 text-gray-600"
                 }`}
               >
-                {comp.status}
+                {comp.status.toUpperCase()}
               </span>
             </div>
+
+            {/* Evidence Image */}
+            {comp.uploadedEvidence?.length > 0 && (
+              <img
+                src={comp.uploadedEvidence[0].url}
+                alt="evidence"
+                className="w-full h-40 object-cover rounded-lg mt-3"
+              />
+            )}
+
+            {/* ID */}
+            <p className="text-xs text-gray-400 mt-2">ID: {comp._id}</p>
           </div>
         ))}
       </div>

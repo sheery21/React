@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 export const customerAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
+
     if (!token) return res.status(401).json({ message: "No token" });
     const isVerified = jwt.verify(token, process.env.SECRET_KEY);
     if (!isVerified) {
@@ -14,8 +15,6 @@ export const customerAuth = async (req, res, next) => {
     }
 
     const user = await UserModel.findById(isVerified.id).select("role bankId");
-
-    console.log("user", user);
 
     if (!user) {
       return res.status(401).json({

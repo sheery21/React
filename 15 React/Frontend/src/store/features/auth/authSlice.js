@@ -26,7 +26,15 @@ const authSlice = createSlice({
     otpVerified: false,
     token: stroedToken || null,
   },
-  reducers: {},
+  reducers: {
+    logOut: (state) => {
+      state.user = null;
+      state.token = null;
+      state.success = false;
+      state.error = null;
+      state.otpVerified = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(sigUpThunk.pending, (state) => {
       state.loading = true;
@@ -195,6 +203,6 @@ const { reducer, actions } = authSlice;
 
 const authReducer = reducer;
 
-const {} = actions;
+const { logOut } = actions;
 
-export { authReducer };
+export { authReducer, logOut };
