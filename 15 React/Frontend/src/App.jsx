@@ -25,20 +25,22 @@ import PrivateRoute from "./routers/privateRoute";
 import CerateComplaint from "./components/complaints/createComplaint";
 import AllComplaint from "./components/complaints/allComplaint";
 import UserDashbosrdHome from "./components/userdashboard/userDashbosrdHome";
+import PublicRoute from "./routers/publicRoute";
 function App() {
   return (
     <>
       <Routes>
-        {/* LogIn Pages */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/user-login" element={<UserLogin />} />
-        <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-
-        {/* SignUp Pages */}
-        <Route path="/user-signup" element={<UserSignup />} />
-        <Route path="/bank-officer-signup" element={<BankOfficerSignup />} />
-        <Route path="/admin-signup" element={<AdminSignup />} />
+        <Route element={<PublicRoute />}>
+          {/* LogIn Pages */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/user-login" element={<UserLogin />} />
+          <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          {/* SignUp Pages */}
+          <Route path="/user-signup" element={<UserSignup />} />
+          <Route path="/bank-officer-signup" element={<BankOfficerSignup />} />
+          <Route path="/admin-signup" element={<AdminSignup />} />
+        </Route>
 
         {/* OtpVerification Pages */}
         <Route path="/user-otp" element={<User_Otp />} />

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import Swal from "sweetalert2";
 import {
   adminOtp,
   Bank_OfficerOtp,
@@ -106,7 +105,7 @@ const authSlice = createSlice({
     builder.addCase(logInWith_Admin_Thunk.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.user = payload;
-      state.token = payload;
+      state.token = payload.token;
       state.success = true;
     });
     builder.addCase(logInWith_Admin_Thunk.rejected, (state, { payload }) => {
@@ -124,7 +123,7 @@ const authSlice = createSlice({
       (state, { payload }) => {
         state.loading = false;
         state.user = payload;
-        state.token = payload;
+        state.token = payload.token;
         state.success = true;
       },
     );

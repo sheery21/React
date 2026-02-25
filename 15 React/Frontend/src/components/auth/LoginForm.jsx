@@ -9,7 +9,6 @@ import {
 import Swal from "sweetalert2";
 
 const LoginForm = ({ role }) => {
-  console.log("role", role);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
