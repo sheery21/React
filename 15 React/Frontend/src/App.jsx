@@ -30,16 +30,16 @@ function App() {
   return (
     <>
       <Routes>
-        <Route element={<PublicRoute />}>
           {/* LogIn Pages */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/user-login" element={<UserLogin />} />
           <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
           {/* SignUp Pages */}
           <Route path="/user-signup" element={<UserSignup />} />
           <Route path="/bank-officer-signup" element={<BankOfficerSignup />} />
           <Route path="/admin-signup" element={<AdminSignup />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+        <Route element={<PublicRoute />}>
         </Route>
 
         {/* OtpVerification Pages */}

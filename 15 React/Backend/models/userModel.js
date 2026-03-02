@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       ref: "bank",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const UserModel = mongoose.model("user", userSchema);

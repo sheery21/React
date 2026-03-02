@@ -88,12 +88,12 @@ const authSlice = createSlice({
     });
     builder.addCase(logIn_Thunk.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.user = payload.data;
+      state.user = payload;
       state.token = payload.token;
       state.success = true;
     });
     builder.addCase(logIn_Thunk.rejected, (state, { payload }) => {
-      state.loading = true;
+      state.loading = false;
       state.error = payload;
       state.success = false;
     });
@@ -109,7 +109,7 @@ const authSlice = createSlice({
       state.success = true;
     });
     builder.addCase(logInWith_Admin_Thunk.rejected, (state, { payload }) => {
-      state.loading = true;
+      state.loading = false;
       state.error = payload;
       state.success = false;
     });

@@ -7,9 +7,9 @@ import {
   logInWith_Bank_Officer_Thunk,
 } from "../../store/features/auth/auth.thunk";
 import Swal from "sweetalert2";
+// import { resetAuth } from "../../store/features/auth/authSlice";
 
 const LoginForm = ({ role }) => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -56,7 +56,10 @@ const LoginForm = ({ role }) => {
         timer: 1500,
         showConfirmButton: false,
       }).then(() => {
+        // dispatch(resetAuth());
         if (user.role === "customer") {
+          console.log("user role" , user.role);
+          
           navigate("/user-dashboard");
         } else if (user.role === "bank_officer") {
           navigate("/bank-dashboard");
@@ -65,7 +68,7 @@ const LoginForm = ({ role }) => {
         }
       });
     }
-  }, [success, token, user]);
+  }, [success, token, user ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -119,6 +122,7 @@ const LoginForm = ({ role }) => {
           </div>
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-primary text-white p-2 rounded hover:bg-secondary transition"
           >
             Login
@@ -129,6 +133,7 @@ const LoginForm = ({ role }) => {
             to={`/${role.toLowerCase().replace(/\s+/g, "-")}-signup`}
             className="text-primary hover:underline"
           >
+            {loading ? "Logging in..." : "Login"}
             Create new account
           </Link>
           <span className="mx-2">|</span>
