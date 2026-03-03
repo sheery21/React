@@ -88,7 +88,7 @@ const authSlice = createSlice({
     });
     builder.addCase(logIn_Thunk.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.user = payload;
+      state.user = payload.data;
       state.token = payload.token;
       state.success = true;
     });
@@ -104,7 +104,7 @@ const authSlice = createSlice({
     });
     builder.addCase(logInWith_Admin_Thunk.fulfilled, (state, { payload }) => {
       state.loading = false;
-      state.user = payload;
+      state.user = payload.data;
       state.token = payload.token;
       state.success = true;
     });
@@ -122,7 +122,7 @@ const authSlice = createSlice({
       logInWith_Bank_Officer_Thunk.fulfilled,
       (state, { payload }) => {
         state.loading = false;
-        state.user = payload;
+        state.user = payload.data;
         state.token = payload.token;
         state.success = true;
       },

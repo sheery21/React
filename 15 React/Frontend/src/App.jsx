@@ -31,6 +31,7 @@ function App() {
     <>
       <Routes>
           {/* LogIn Pages */}
+        <Route element={<PublicRoute />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/user-login" element={<UserLogin />} />
           <Route path="/bank-officer-login" element={<BankOfficerLogin />} />
@@ -39,7 +40,6 @@ function App() {
           <Route path="/bank-officer-signup" element={<BankOfficerSignup />} />
           <Route path="/admin-signup" element={<AdminSignup />} />
           <Route path="/admin-login" element={<AdminLogin />} />
-        <Route element={<PublicRoute />}>
         </Route>
 
         {/* OtpVerification Pages */}

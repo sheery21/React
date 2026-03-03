@@ -31,13 +31,13 @@ const LoginForm = ({ role }) => {
           Swal.showLoading();
         },
       });
-    } else {
-      Swal.close();
+      return () => Swal.close();
     }
   }, [loading]);
 
   useEffect(() => {
     if (error) {
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Login Failed",
@@ -48,6 +48,7 @@ const LoginForm = ({ role }) => {
 
   useEffect(() => {
     if (success && token && user) {
+      Swal.close();
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       Swal.fire({
@@ -58,8 +59,8 @@ const LoginForm = ({ role }) => {
       }).then(() => {
         // dispatch(resetAuth());
         if (user.role === "customer") {
-          console.log("user role" , user.role);
-          
+          console.log("user role", user.role);
+
           navigate("/user-dashboard");
         } else if (user.role === "bank_officer") {
           navigate("/bank-dashboard");
@@ -68,7 +69,7 @@ const LoginForm = ({ role }) => {
         }
       });
     }
-  }, [success, token, user ]);
+  }, [success, token, user]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
