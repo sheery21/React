@@ -49,8 +49,6 @@ const LoginForm = ({ role }) => {
   useEffect(() => {
     if (success && token && user) {
       Swal.close();
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
       Swal.fire({
         icon: "success",
         title: "Login Successful",

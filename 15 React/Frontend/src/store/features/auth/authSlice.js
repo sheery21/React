@@ -32,6 +32,9 @@ const authSlice = createSlice({
       state.success = false;
       state.error = null;
       state.otpVerified = false;
+
+      localStorage.removeItem("token");
+  localStorage.removeItem("user");
     },
   },
   extraReducers: (builder) => {
@@ -91,6 +94,9 @@ const authSlice = createSlice({
       state.user = payload.data;
       state.token = payload.token;
       state.success = true;
+
+      localStorage.setItem("token", payload.token);
+      localStorage.setItem("user", JSON.stringify(payload.data));
     });
     builder.addCase(logIn_Thunk.rejected, (state, { payload }) => {
       state.loading = false;
@@ -107,6 +113,9 @@ const authSlice = createSlice({
       state.user = payload.data;
       state.token = payload.token;
       state.success = true;
+
+      localStorage.setItem("token", payload.token);
+      localStorage.setItem("user", JSON.stringify(payload.data));
     });
     builder.addCase(logInWith_Admin_Thunk.rejected, (state, { payload }) => {
       state.loading = false;
@@ -125,6 +134,9 @@ const authSlice = createSlice({
         state.user = payload.data;
         state.token = payload.token;
         state.success = true;
+
+        localStorage.setItem("token", payload.token);
+        localStorage.setItem("user", JSON.stringify(payload.data));
       },
     );
     builder.addCase(

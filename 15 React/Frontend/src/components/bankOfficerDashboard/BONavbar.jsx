@@ -9,7 +9,7 @@ const BONavbar = () => {
   const dispatch = useDispatch()
 
   const handleLogout = () =>{
-    dispatch(logOut)
+    dispatch(logOut())
     localStorage.removeItem("token")
     localStorage.removeItem("user")
     navigate("/")

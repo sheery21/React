@@ -6,8 +6,7 @@ import UserModel from "../models/userModel.js";
 export const adminControllers = async (req, res) => {
   try {
     const admin = req.admin;
-    console.log("admin ", admin);
-
+    
     if (!admin) {
       return res.status(400).json({
         message: "un auth user",
