@@ -1,25 +1,30 @@
 // src/components/bankOfficerDashboard/BOSidebar.jsx
-const BOSidebar = () => {
+const BOSidebar = ({ activeTab, setActiveTab }) => {
+  const menuUtems = [
+    "dashboard",
+    "pending",
+    "approved",
+    "rejected",
+    "settings",
+  ];
   return (
     <div className="w-64 bg-primary text-white min-h-screen p-6">
       <h2 className="text-2xl font-bold mb-8">Bank Officer</h2>
 
       <ul className="space-y-4">
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Dashboard
-        </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          All Requests
-        </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Approvals
-        </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Reject
-        </li>
-        <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Settings
-        </li>
+        {menuUtems.map((item) => (
+          <li
+            key={item}
+            onClick={() => setActiveTab(item)}
+            className={`p-2 rounded 
+              cursor-pointer
+               capitalize ${
+                 activeTab === item ? "bg-secondary" : "hover:bg-secondary"
+               }`}
+          >
+            {item}
+          </li>
+        ))}
       </ul>
     </div>
   );
