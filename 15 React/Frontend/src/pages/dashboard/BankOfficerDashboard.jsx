@@ -2,13 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import BONavbar from "../../components/bankOfficerDashboard/BONavbar";
 import BOSidebar from "../../components/bankOfficerDashboard/BOSidebar";
 import BOStatCard from "../../components/bankOfficerDashboard/BOStatCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getBankOfficerComplaints,
   updateComplaintStatus,
 } from "../../store/features/complaint/bankOfficer.thunk";
 
 const BankOfficerDashboard = () => {
+  const [activrTab, setActiveTab] = useState("dashboard");
   const dispatch = useDispatch();
   const { complaints } = useSelector((state) => state.bankOfficer);
   useEffect(() => {
@@ -21,7 +22,7 @@ const BankOfficerDashboard = () => {
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      <BOSidebar />
+      <BOSidebar activrTab={activrTab} setActiveTab={setActiveTab} />
 
       <div className="flex-1">
         <BONavbar />
@@ -55,18 +56,40 @@ const BankOfficerDashboard = () => {
                     <tr key={comp._id} className="border-t">
                       <td className="p-3">{comp.complaintType}</td>
                       <td className="p-3">{comp.category}</td>
-                      <td className="p-3 capitalize">{comp.status}</td>
+                      <td
+                        className={`p-3 capitalize font-semibold ${
+                          comp.status === "approved"
+                            ? "text-green-600"
+                            : comp.status === "rejected"
+                              ? "text-red-600"
+                              : comp.status === "pending"
+                                ? "text-yellow-600"
+                                : ""
+                        }`}
+                      >
+                        {comp.status}
+                      </td>
                       <td className="p-3">
                         <button
                           onClick={() => handleUpdate(comp._id, "approved")}
-                          className="bg-primary text-white px-3 py-1 rounded mr-2"
+                          disabled={comp.status !== "pending"}
+                          className={`px-3 py-1 rounded mr-2 text-white ${
+                            comp.status === "approved"
+                              ? "bg-green-600"
+                              : "bg-primary"
+                          } ${comp.status !== "pending" && "opacity-50 cursor-not-allowed"}`}
                         >
                           Approve
                         </button>
 
                         <button
                           onClick={() => handleUpdate(comp._id, "rejected")}
-                          className="bg-red-500 text-white px-3 py-1 rounded"
+                          disabled={comp.status !== "pending"}
+                          className={`px-3 py-1 rounded text-white ${
+                            comp.status === "rejected"
+                              ? "bg-red-600"
+                              : "bg-red-500"
+                          } ${comp.status !== "pending" && "opacity-50 cursor-not-allowed"}`}
                         >
                           Reject
                         </button>

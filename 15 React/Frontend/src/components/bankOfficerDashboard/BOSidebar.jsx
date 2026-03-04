@@ -9,13 +9,13 @@ const BOSidebar = () => {
           Dashboard
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          User Requests
+          All Requests
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
           Approvals
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
-          Reports
+          Reject
         </li>
         <li className="hover:bg-secondary p-2 rounded cursor-pointer">
           Settings
