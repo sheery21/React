@@ -51,9 +51,8 @@ If user idea is incomplete, make assumptions and explain them inside additional_
       },
     });
 
-    let aiText =  resp?.candidates?.[0]?.content?.parts?.[0]?.text;
-    console.log("aiText" ,aiText);
-    
+    let aiText = resp?.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log("aiText", aiText);
 
     // if (typeof aiText !== "string") {
     //   aiText = JSON.stringify(aiText);
@@ -72,5 +71,5 @@ If user idea is incomplete, make assumptions and explain them inside additional_
 });
 
 app.listen(PORT, () =>
-  console.log(`server running on http://localhost:${PORT}`)
+  console.log(`server running on http://localhost:${PORT}`),
 );
