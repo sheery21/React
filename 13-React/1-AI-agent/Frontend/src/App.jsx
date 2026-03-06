@@ -22,7 +22,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/home" element={<Home />} />
           <Route path="/DashBoard" element={<DashBoard />} />
-        <Route path="/create" element={<CreatePitch />} />
+          <Route path="/create" element={<CreatePitch />} />
         </Route>
         <Route path="/About" element={<About />} />
         <Route path="/Services" element={<Services />} />

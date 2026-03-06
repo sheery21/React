@@ -29,7 +29,7 @@ const SignUp = () => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
       const user = userCredential.user;
@@ -51,7 +51,6 @@ const SignUp = () => {
         title: "Account Created!",
         text: "User registered successfully 🎉",
       }).then(() => navigate("/home"));
-
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -123,16 +122,19 @@ const SignUp = () => {
               />
             </div>
 
-            <Button 
-              className="w-full px-4 py-2" 
-              text="Sign Up" 
-              onClick={registerUser} 
+            <Button
+              className="w-full px-4 py-2"
+              text="Sign Up"
+              onClick={registerUser}
             />
           </div>
 
           <p className="text-center text-sm text-gray-600 mt-6">
             Already have an account?{" "}
-            <Link to="/" className="text-indigo-600 font-semibold hover:underline">
+            <Link
+              to="/"
+              className="text-indigo-600 font-semibold hover:underline"
+            >
               Log In
             </Link>
           </p>
